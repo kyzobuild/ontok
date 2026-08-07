@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<information-model>
+
+  <frontmatter normative="yes">
+    <number>1</number>
+    <subject>the ways a statement can function, and the relationships among them</subject>
+    <status>draft</status>
+    <supersedes>none</supersedes>
+    <normative>scope, categories, criterion, objects, relationships, composition, refusals, subsumptions, invariants, boundary, owed</normative>
+  </frontmatter>
+
+  <scope normative="yes">
+    <models>
+      The closed set of ways a statement can function, the relationships among
+      those ways, and the structures they form. A way a statement can function is
+      called a kind. The objects section states the kinds and the relationships
+      section states the relationships.
+    </models>
+    <abstraction>
+      This model is independent of implementation, protocol, and encoding. No
+      normative claim here holds only if a storage form, a serialization, a key,
+      an identifier scheme, a query language, a protocol, or a product is a
+      particular one.
+    </abstraction>
+    <excludes>
+      <subject>What exists in a domain: which referents there are, which predicates the domain admits, and what each predicate may take.</subject>
+      <owner>The pack model.</owner>
+    </excludes>
+    <excludes>
+      <subject>How a statement is carried, how it is identified, how a kind is fixed to it, and how it is admitted.</subject>
+      <owner>The record model.</owner>
+    </excludes>
+    <excludes>
+      <subject>Storage, encoding, order, indexing, transport, and evaluation.</subject>
+      <owner>Any realization, bounded by the boundary section.</owner>
+    </excludes>
+    <primitives>
+      <term>statement</term>
+      <assumed>
+        A statement is something said. It has exactly three positions: subject,
+        predicate, value.
+      </assumed>
+    </primitives>
+    <primitives>
+      <term>referent</term>
+      <assumed>
+        A referent is what a position holds when what it holds is a thing rather
+        than a value, a statement, or a kind. Whether two referents are one
+        referent is determinate. This model does not decide it, never names a
+        referent, and never describes one.
+      </assumed>
+    </primitives>
+    <primitives>
+      <term>literal</term>
+      <assumed>
+        A literal is what a position holds when what it holds is identical to
+        itself in every set of statements with no correspondence asserted. Two
+        literals are one literal when they are equal. This model states no
+        vocabulary of literals and admits no division of them into sorts.
+      </assumed>
+    </primitives>
+    <primitives>
+      <term>coordinate</term>
+      <assumed>
+        A coordinate is a literal on the one time axis. Coordinates are totally
+        ordered. This model states one time axis and no other.
+      </assumed>
+    </primitives>
+    <primitives>
+      <term>position occupancy</term>
+      <assumed>
+        A position holds a referent, a literal, a statement, a kind of this model,
+        or nothing. A position holding nothing is unbound. Whether a position is
+        bound is determinate, and which of the four a bound position holds is
+        determinate.
+      </assumed>
+    </primitives>
+  </scope>
+
+  <categories normative="yes">
+    <category>
+      <name>first-order</name>
+      <recognition-rule>Every bound position holds a referent or a literal.</recognition-rule>
+      <boundary-example>
+        <inside>A subscription began at a coordinate. Subject and predicate hold referents, value holds a literal.</inside>
+        <outside>Someone put that statement forward. Its subject holds a statement, so it is second-order.</outside>
+      </boundary-example>
+    </category>
+    <category>
+      <name>second-order</name>
+      <recognition-rule>At least one position holds a statement, and none holds a kind.</recognition-rule>
+      <boundary-example>
+        <inside>An artifact bears a statement. The subject holds a statement.</inside>
+        <outside>An artifact was produced at a coordinate. It holds referents and a literal, so it is first-order.</outside>
+      </boundary-example>
+    </category>
+    <category>
+      <name>reflexive</name>
+      <recognition-rule>At least one position holds a kind of this model.</recognition-rule>
+      <boundary-example>
+        <inside>A domain predicate specializes a kind this model states.</inside>
+        <outside>One domain predicate specializes another. Both positions hold referents, so it is first-order.</outside>
+      </boundary-example>
+    </category>
+    <exhaustive>
+      Every candidate falls in exactly one category. Occupancy is exhaustively
+      referent, literal, statement, kind, or unbound, and the primitives section
+      makes which one determinate. A kind in any position decides reflexive; a
+      statement with no kind decides second-order; otherwise first-order.
+    </exhaustive>
+  </categories>
+
+  <criterion normative="yes">
+    <term>
+      <name>candidate</name>
+      <definition>A proposed kind, offered for admission to the objects section. Never a particular statement.</definition>
+    </term>
+    <term>
+      <name>position</name>
+      <definition>One of the three places in a statement: subject, predicate, value.</definition>
+    </term>
+    <procedure>
+      The recognition rules in the categories section are the procedure. They are
+      mutually exclusive, so no ordering among them binds.
+    </procedure>
+    <step>
+      <test>Which recognition rule in the categories section does the candidate satisfy?</test>
+      <outcome>The category stating that rule.</outcome>
+    </step>
+    <terminal-outcome>
+      A candidate satisfying no recognition rule is not a way a statement
+      functions. It is a referent, which this model does not name, a literal,
+      which this model does not divide, or a vocabulary, which the pack model
+      closes.
+    </terminal-outcome>
+  </criterion>
+
+  <objects normative="yes">
+    <declaration-order>
+      Significant. Declaration order is the order of the kinds wherever an order
+      over kinds is required, and the sequence below fixes it.
+    </declaration-order>
+
+    <object>
+      <name>entity</name>
+      <category>first-order</category>
+      <property><name>subject</name><value-space>One referent.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes entity.</value-space></property>
+      <property><name>value</name><value-space>One referent, or unbound.</value-space></property>
+      <formation-rule>Premises: the subject holds a referent; the predicate's concept specializes entity. Conclusion: the statement functions as entity.</formation-rule>
+      <refuses>Asserting what class the subject belongs to. That is concept.</refuses>
+    </object>
+
+    <object>
+      <name>event</name>
+      <category>first-order</category>
+      <property><name>subject</name><value-space>One referent.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes event.</value-space></property>
+      <property><name>value</name><value-space>One referent, one literal, or unbound.</value-space></property>
+      <formation-rule>Premises: the subject holds a referent; the predicate's concept specializes event. Conclusion: the statement functions as event.</formation-rule>
+      <refuses>Asserting what obtains across an interval. That is state under a context.</refuses>
+    </object>
+
+    <object>
+      <name>state</name>
+      <category>first-order</category>
+      <property><name>subject</name><value-space>One referent.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes state.</value-space></property>
+      <property><name>value</name><value-space>One referent or one literal.</value-space></property>
+      <formation-rule>Premises: the subject holds a referent; the predicate's concept specializes state; the value is bound. Conclusion: the statement functions as state.</formation-rule>
+      <refuses>Carrying when it obtains, and whether it still obtains. When is a context over it; whether is the held judgment.</refuses>
+    </object>
+
+    <object>
+      <name>role</name>
+      <category>first-order</category>
+      <property><name>subject</name><value-space>One referent.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes role.</value-space></property>
+      <property><name>value</name><value-space>One referent naming the capacity.</value-space></property>
+      <formation-rule>Premises: the subject holds a referent; the predicate's concept specializes role; the value holds a referent. Conclusion: the statement functions as role.</formation-rule>
+      <refuses>Being a property of the subject. One referent holds several capacities and remains one referent.</refuses>
+    </object>
+
+    <object>
+      <name>relation</name>
+      <category>first-order</category>
+      <property><name>subject</name><value-space>One referent, or one statement.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes relation.</value-space></property>
+      <property><name>value</name><value-space>One referent, or one statement.</value-space></property>
+      <formation-rule>Premises: the predicate's concept specializes relation; subject and value are both bound. Conclusion: the statement functions as relation.</formation-rule>
+      <refuses>Carrying when the connection began or whether it still holds.</refuses>
+    </object>
+
+    <object>
+      <name>claim</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes claim.</value-space></property>
+      <property><name>value</name><value-space>One referent naming who put the subject forward.</value-space></property>
+      <formation-rule>Premises: the subject holds a statement; the predicate's concept specializes claim. Conclusion: the statement functions as claim.</formation-rule>
+      <refuses>Settling the subject. Assertion is a ground, not a verdict.</refuses>
+    </object>
+
+    <object>
+      <name>evidence</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes evidence.</value-space></property>
+      <property><name>value</name><value-space>One referent naming what bears the subject.</value-space></property>
+      <formation-rule>Premises: the subject holds a statement; the predicate's concept specializes evidence. Conclusion: the statement functions as evidence.</formation-rule>
+      <refuses>Being what it cites.</refuses>
+    </object>
+
+    <object>
+      <name>derivation</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement, bound.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes derivation.</value-space></property>
+      <property><name>value</name><value-space>One statement functioning as rule.</value-space></property>
+      <formation-rule>Premises: the subject holds a bound statement; the predicate's concept specializes derivation; the value holds a statement functioning as rule; the subject is that rule's conclusion under a binding of the rule's unbound positions. Conclusion: the statement functions as derivation.</formation-rule>
+      <refuses>Asserting that the subject currently holds. The held judgment computes that.</refuses>
+    </object>
+
+    <object>
+      <name>invalidation</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes invalidation.</value-space></property>
+      <property><name>value</name><value-space>One referent naming who released the subject.</value-space></property>
+      <formation-rule>Premises: the subject holds a statement; the predicate's concept specializes invalidation. Conclusion: the statement functions as invalidation.</formation-rule>
+      <refuses>Removing the subject. The released statement remains and remains reachable.</refuses>
+    </object>
+
+    <object>
+      <name>rule</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement carrying one or more unbound positions.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes rule.</value-space></property>
+      <property><name>value</name><value-space>One statement whose unbound positions appear in the subject.</value-space></property>
+      <formation-rule>Premises: the subject holds a statement carrying unbound positions; the predicate's concept specializes rule; every unbound position of the value appears in the subject. Conclusion: the statement functions as rule.</formation-rule>
+      <refuses>Naming any predicate belonging to a domain. A rule reaches a domain through concept.</refuses>
+    </object>
+
+    <object>
+      <name>context</name>
+      <category>second-order</category>
+      <property><name>subject</name><value-space>One statement.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes context.</value-space></property>
+      <property><name>value</name><value-space>One referent or one literal bounding where or when the subject is put forward.</value-space></property>
+      <formation-rule>Premises: the subject holds a statement; the predicate's concept specializes context. Conclusion: the statement functions as context.</formation-rule>
+      <refuses>Ranking scopes against one another. Which scope binds a question is decided by the question.</refuses>
+    </object>
+
+    <object>
+      <name>concept</name>
+      <category>reflexive</category>
+      <property><name>subject</name><value-space>One referent.</value-space></property>
+      <property><name>predicate</name><value-space>One referent whose concept specializes concept.</value-space></property>
+      <property><name>value</name><value-space>One kind of this model, or one referent held in the subject position of another statement functioning as concept.</value-space></property>
+      <formation-rule>Premises: the subject holds a referent; the predicate's concept specializes concept, and the statement itself satisfies that premise when its subject and its predicate are one referent; the value holds a kind of this model or a referent classified by another concept. Conclusion: the statement functions as concept.</formation-rule>
+      <refuses>Naming what exists. A concept classifies a referent and this model classifies none.</refuses>
+    </object>
+  </objects>
+
+  <relationships normative="yes">
+    <relationship>
+      <name>concerns</name>
+      <participant><object>any kind with a position holding a referent</object><position>holder</position><cardinality>one</cardinality></participant>
+      <participant><object>referent</object><position>held</position><cardinality>stated by the holder's value-space</cardinality></participant>
+      <direction>Directed from the statement to the referent.</direction>
+      <constraint>Every statement stands in this relationship at its predicate position.</constraint>
+      <refuses>Holding a literal, a statement, or a kind.</refuses>
+    </relationship>
+
+    <relationship>
+      <name>carries</name>
+      <participant><object>any kind with a position holding a literal</object><position>holder</position><cardinality>one</cardinality></participant>
+      <participant><object>literal</object><position>held</position><cardinality>stated by the holder's value-space</cardinality></participant>
+      <direction>Directed from the statement to the literal.</direction>
+      <constraint>A literal has no positions and stands as holder in no relationship.</constraint>
+      <refuses>Holding a referent, a statement, or a kind.</refuses>
+    </relationship>
+
+    <relationship>
+      <name>about</name>
+      <participant><object>any kind with a position holding a statement</object><position>holder</position><cardinality>one</cardinality></participant>
+      <participant><object>statement</object><position>held</position><cardinality>stated by the holder's value-space</cardinality></participant>
+      <direction>Directed from the holding statement to the held statement.</direction>
+      <constraint>The held statement may itself stand as holder. Composition is unbounded.</constraint>
+      <constraint>Acyclic. No statement reaches itself by following this relationship.</constraint>
+      <refuses>Holding a referent, a literal, or a kind.</refuses>
+    </relationship>
+
+    <relationship>
+      <name>specializes</name>
+      <participant><object>any kind with a position holding a kind of this model</object><position>holder</position><cardinality>one</cardinality></participant>
+      <participant><object>kind of this model</object><position>held</position><cardinality>one</cardinality></participant>
+      <direction>Directed from the specializing concept to the kind it specializes.</direction>
+      <constraint>One step. A kind of this model stands as held only, never as holder.</constraint>
+      <refuses>Holding a referent, a literal, or a statement. A concept whose value holds a referent stands in concerns, and the classification judgment carries it to a kind.</refuses>
+    </relationship>
+
+    <closed>
+      Closed at four. A relationship constrains exactly one occupancy. The
+      primitives section admits five, of which unbound is the absence of one,
+      leaving referent, literal, statement, kind. Concerns constrains the first,
+      carries the second, about the third, specializes the fourth. A fifth
+      relationship would constrain an occupancy the primitives do not admit. A
+      constraint on which kind occupies a position, as derivation's value
+      requires, is stated by that property and is not a relationship, because the
+      occupancy remains a statement.
+    </closed>
+  </relationships>
+
+  <composition normative="yes">
+    <judgment>
+      <name>classification</name>
+      <form>p ↑ K, read as predicate referent p reaches kind K.</form>
+      <premise>Some statement C functioning as concept holds p in its subject position and K in its value position.</premise>
+      <conclusion>p ↑ K</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>classification, transitive</name>
+      <form>p ↑ K</form>
+      <premise>Some C functioning as concept holds p in its subject position and q in its value position, and q ↑ K.</premise>
+      <conclusion>p ↑ K</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>kind assignment</name>
+      <form>S : K, read as statement S functions as kind K.</form>
+      <premise>S's predicate position holds p, and p ↑ K.</premise>
+      <premise>S satisfies the formation rule of K.</premise>
+      <conclusion>S : K</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>kind assignment, base</name>
+      <form>S : concept</form>
+      <premise>S's subject position and S's predicate position hold one referent.</premise>
+      <premise>S's value position holds the kind concept.</premise>
+      <conclusion>S : concept</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>classification, well-founded</name>
+      <form>p ↑ K terminates.</form>
+      <premise>Following classification from p reaches a statement satisfying kind assignment, base, in finitely many steps.</premise>
+      <conclusion>The chain from p is finite and reaches a kind of this model.</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>bound</name>
+      <form>bound(S)</form>
+      <premise>No position of S is unbound.</premise>
+      <conclusion>bound(S)</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>same</name>
+      <form>S ≡ T</form>
+      <premise>For each of the three positions, the occupants in S and T are one referent, are equal literals, are one kind, satisfy this judgment recursively, or are both unbound.</premise>
+      <conclusion>S ≡ T</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>grounded</name>
+      <form>G ⊢ S</form>
+      <premise>bound(S).</premise>
+      <premise>Some W in G holds a statement T in its subject position with S ≡ T, and W : claim, or W : evidence, or W : derivation.</premise>
+      <conclusion>G ⊢ S</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>held</name>
+      <form>G ⊨ S</form>
+      <premise>G ⊢ S.</premise>
+      <premise>No V in G with V : invalidation holds a statement T in its subject position with S ≡ T.</premise>
+      <conclusion>G ⊨ S</conclusion>
+    </judgment>
+
+    <judgment>
+      <name>held at</name>
+      <form>G ⊨ S at c</form>
+      <premise>The subset of G whose members are confined by a context whose value is a coordinate at or before c grounds S and releases it in no invalidation.</premise>
+      <conclusion>G ⊨ S at c</conclusion>
+    </judgment>
+
+    <well-formed>
+      A statement is well-formed when S : K holds for exactly one K and each of its
+      three positions is occupied as K's value-spaces state. A set is well-formed
+      when every member is well-formed, every statement occupying a position of a
+      member is itself a member, and every predicate in the set reaches a kind.
+    </well-formed>
+
+    <underivable>
+      No derivation exists for: a statement whose predicate reaches two kinds; a
+      statement whose predicate reaches none; a statement satisfying the formation
+      rule of a kind its predicate does not reach; a derivation whose subject
+      carries an unbound position; a rule whose value carries an unbound position
+      absent from its subject; a predicate whose classification chain
+      reaches no kind, revisits a referent, or reaches no base case; a set in which
+      a statement reaches itself through the about relationship; grounded or held
+      over a statement that is not bound.
+    </underivable>
+
+    <dynamics>
+      This model defines no evaluation, no reduction, and no operation other than
+      formation. None of the judgments rewrites a statement and none produces one.
+    </dynamics>
+  </composition>
+
+  <refusals normative="yes">
+    <refusal>
+      <candidate>Any kind of thing: a classification naming what exists.</candidate>
+      <ground>A kind naming what exists makes this model a vocabulary. A vocabulary must be adopted. Two sets of statements whose authors disagree about what exists then share no term.</ground>
+      <lost>This model says nothing about any subject matter. A domain reaches it only through concept.</lost>
+    </refusal>
+    <refusal>
+      <candidate>Any predicate.</candidate>
+      <ground>A predicate is a referent a domain names. Naming one here makes this model a vocabulary, on the ground above.</ground>
+      <lost>This model states no predicate, and every statement's predicate comes from a domain.</lost>
+    </refusal>
+    <refusal>
+      <candidate>A kind asserting the current standing of a statement.</candidate>
+      <ground>The held judgment computes standing. A kind asserting it gives one question two answers that disagree.</ground>
+      <lost>Standing is computed and never asserted.</lost>
+    </refusal>
+    <refusal>
+      <candidate>A kind asserting a degree of confidence, probability, or similarity.</candidate>
+      <ground>The grounded judgment admits three grounds and none is a magnitude.</ground>
+      <lost>Degree grounds nothing. A magnitude asserted about a statement is a claim whose subject is a state.</lost>
+    </refusal>
+    <refusal>
+      <candidate>A division of literals into sorts.</candidate>
+      <ground>Which sorts exist is chosen, and a chosen member set here is a vocabulary.</ground>
+      <lost>This model states no arithmetic and no comparison over literals other than equality and the total order on coordinates.</lost>
+    </refusal>
+  </refusals>
+
+  <subsumptions normative="yes">
+    <subsumption><candidate>validity, the time a statement holds over</candidate><carrier>context</carrier><expression>A context whose value is a coordinate bounds when the subject is put forward. Two contexts bound both ends.</expression></subsumption>
+    <subsumption><candidate>supersession</candidate><carrier>invalidation, and a later statement</carrier><expression>An invalidation releasing the earlier statement and a separate statement asserting the replacement.</expression></subsumption>
+    <subsumption><candidate>perception, observation, measurement</candidate><carrier>claim, or evidence</carrier><expression>A report is a claim whose value names the observer. A recording is a referent, and evidence cites it.</expression></subsumption>
+    <subsumption><candidate>provenance</candidate><carrier>claim, evidence, derivation</carrier><expression>Which of the three grounding kinds holds a statement in its subject position.</expression></subsumption>
+    <subsumption><candidate>authority, permission</candidate><carrier>role, and rule</carrier><expression>A role asserts a capacity. A rule takes roles among its premises and concludes what is permitted.</expression></subsumption>
+    <subsumption><candidate>identity resolution</candidate><carrier>claim, over a relation</carrier><expression>That two referents are one is a relation, and asserting it is a claim, groundable and releasable.</expression></subsumption>
+    <subsumption><candidate>uncertainty</candidate><carrier>claim</carrier><expression>A statement put forward and grounded no other way is a claim.</expression></subsumption>
+    <subsumption><candidate>version</candidate><carrier>invalidation, and a coordinate</carrier><expression>A version is the set satisfying the held at judgment for one coordinate.</expression></subsumption>
+    <subsumption><candidate>a second time axis</candidate><carrier>the contexts on second-order statements</carrier><expression>When something obtains is a context on the first-order statement. When it was put forward is a context on the claim or derivation standing to it. One axis carries both.</expression></subsumption>
+    <subsumption><candidate>the inputs of a derivation</candidate><carrier>relation, over statements</carrier><expression>A relation whose subject is the derivation and whose value is an input statement. One per input.</expression></subsumption>
+  </subsumptions>
+
+  <invariants normative="yes">
+    <invariant><id>I1</id><claim>No kind names anything belonging to any domain.</claim><refuter>A value-space, formation rule, or refuses line satisfiable in one domain and not another.</refuter></invariant>
+    <invariant><id>I2</id><claim>Every statement has exactly three positions.</claim><refuter>An object stating a fourth property, or fewer than three.</refuter></invariant>
+    <invariant><id>I3</id><claim>Every statement's kind is the kind its predicate reaches.</claim><refuter>A formation rule assigning a kind without consulting the predicate's classification.</refuter></invariant>
+    <invariant><id>I4</id><claim>Concept is the only kind with a position holding a kind of this model.</claim><refuter>A second kind whose value-space admits a kind.</refuter></invariant>
+    <invariant><id>I5</id><claim>Every relationship constrains exactly one occupancy the primitives admit, and every admitted occupancy other than unbound is constrained by exactly one relationship.</claim><refuter>A relationship constraining two, two constraining one, or an admitted occupancy none constrains.</refuter></invariant>
+    <invariant><id>I6</id><claim>No normative claim holds only if a storage form, serialization, identifier scheme, protocol, query language, or product is a particular one.</claim><refuter>A normative claim whose truth changes when any of those is exchanged.</refuter></invariant>
+    <invariant><id>I7</id><claim>Every judgment premise is decided by inspecting position occupancy, the primitives declared in the scope section, the objects section, and the relationships section.</claim><refuter>A premise requiring knowledge of how something is stored, encoded, transported, or evaluated.</refuter></invariant>
+    <invariant><id>I8</id><claim>The classification chain from every predicate is finite and terminates in a kind of this model.</claim><refuter>A concept admitted with no path to the base case, or a chain that revisits a referent.</refuter></invariant>
+  </invariants>
+
+  <boundary normative="yes">
+    <realization-class>
+      Many realizations derive from this model. A realization is anything that
+      carries statements and assigns kinds to them. No realization is privileged.
+    </realization-class>
+    <must-supply><obligation>A carrier for a statement with three positions: subject, predicate, value.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>Exactly one kind per statement, taken from the kind its predicate reaches and not chosen by whoever writes the statement.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>The kinds as declared, under the declared order, with none added and none omitted.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>The occupancies as distinguished here, so that a position holding a referent is distinguishable from one holding a literal.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>A means of occupying a position with a statement, and of detecting a cycle through the about relationship.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>A means of leaving a position unbound and of binding it, so that rule and derivation are distinguishable.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>One time axis, totally ordered, carrying every coordinate.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>Standing computed by the held judgment, never asserted and never stored.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>A means of classifying a domain predicate through concept, such that every predicate reaches a kind.</obligation><owner>The realization.</owner></must-supply>
+    <must-supply><obligation>One referent satisfying the base case of kind assignment, standing as its own predicate, so that the classification chain terminates.</obligation><owner>The realization.</owner></must-supply>
+    <may-choose>How a statement is carried, encoded, ordered, indexed, transported, or addressed.</may-choose>
+    <may-choose>What the three positions are called in its own surface.</may-choose>
+    <may-choose>Which literals it admits, and how it writes them.</may-choose>
+    <may-choose>Whether it evaluates rules to derivations, and by what strategy.</may-choose>
+    <may-choose>Whether it stores anything.</may-choose>
+    <may-not-decide>Which kinds exist.</may-not-decide>
+    <may-not-decide>That a statement has three positions.</may-not-decide>
+    <may-not-decide>What a position admits.</may-not-decide>
+    <may-not-decide>Which relationships exist, or what occupancy each constrains.</may-not-decide>
+    <may-not-decide>How a statement acquires its kind.</may-not-decide>
+    <may-not-decide>The declaration order of the kinds.</may-not-decide>
+    <may-not-decide>Whether standing is computed or stored.</may-not-decide>
+    <may-not-decide>How many time axes there are.</may-not-decide>
+    <may-not-decide>Whether two statements are one statement.</may-not-decide>
+    <direction>
+      Every obligation runs from this model to a realization. No claim in a
+      normative section holds only if a realization chooses a particular way.
+    </direction>
+  </boundary>
+
+  <owed normative="yes">
+    <item>
+      <fact>This section carries no item. Every fact settled here that another document must carry is named in the scope section with its owner.</fact>
+      <owner>Stated in the scope section.</owner>
+    </item>
+  </owed>
+
+</information-model>
