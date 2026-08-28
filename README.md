@@ -5,7 +5,7 @@ The Ontology Kernel: the closed set of ways a statement can function.
 ONTOK is a notation, not an ontology. It states nothing about what exists, names no predicate, and
 assumes no substrate. It applies to ontologies other people already built, the way IPA applies to
 languages nobody designed for it. A statement functions the same way whether it lives in a Fabric
-ontology, a KyzoDB record, a PowerBI semantic model, or a spreadsheet.
+ontology, a PowerBI semantic model, or a spreadsheet.
 
 The end it serves: meaning is commensurable without a mind to reconcile it.
 

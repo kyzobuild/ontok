@@ -1,7 +1,7 @@
 """The Ontology Kernel.
 
 A notation, not an ontology. It names what the statements in a system are already doing, and a
-statement functions the same way whether it lives in a Fabric ontology, a KyzoDB record, or a
+statement functions the same way whether it lives in a Fabric ontology, or a
 spreadsheet. Implementations stay local. Meaning becomes shared.
 """
 
