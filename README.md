@@ -55,7 +55,9 @@ Concepts determine what declarations mean, Contexts determine where meaning and 
 
 ## Reference Implementation
 
-The reference implementation is organized as a uv workspace of independently publishable Python packages sharing the `ontok` namespace:
+Language realizations live beneath `packages/<language>/`, allowing each language to use its native workspace and packaging tools while implementing the same semantic modules.
+
+The Python realization is organized under `packages/python/` as a uv workspace of independently publishable packages sharing the `ontok` namespace:
 
 - `ontok-core` provides `ontok.core`.
 - `ontok-vsm` provides `ontok.vsm` and depends on `ontok-core`.

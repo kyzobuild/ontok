@@ -31,6 +31,8 @@ The specification files are not serialized organizational graphs and are not sub
 
 Each XML module and its corresponding type-native reference package form one executable specification. The XML defines meaning independently of any host language; the package realizes that meaning through types whose successful construction makes invalid declarations unrepresentable.
 
-The reference packages are independently publishable members of one uv workspace under the shared `ontok` namespace. Package dependencies mirror XML imports exactly: `ontok.core` depends on no ONTOK package, while `ontok.vsm` and `ontok.scim` depend one-way on `ontok.core`.
+Each language realization belongs under `packages/<language>/` and uses that language's native workspace and packaging tools. The Python packages live under `packages/python/` as independently publishable members of one uv workspace sharing the `ontok` namespace.
+
+Package dependencies mirror XML imports exactly in every language: Core depends on no ONTOK package, while VSM and SCIM depend one-way on Core.
 
 Only `README.md` and `ontok-*.xml` source files belong in this directory. Implementations, tests, generated files, and build artifacts belong elsewhere.
