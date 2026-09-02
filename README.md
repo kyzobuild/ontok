@@ -27,10 +27,12 @@ From this structure, each successive layer requires constructs supplied by the l
 
 ### Reality
 
-- **Entity** — a persistent particular.
-- **Relation** — a domain association.
+- **Entity** — a particular thing whose identity persists as its conditions and associations change.
+- **Relation** — an identifiable domain association from one Node to another.
 - **State** — a condition of a Node that holds within the organizational graph.
-- **Event** — a persistent record that an occurrence changed, preserved, or revealed one or more States.
+- **Event** — a durable memorial of one organizational occurrence.
+
+Every Reality construct carries explicit type identity. An Event declares its temporal extent and memorialization; its recording time follows from those constructed facts, while causation exists separately as a typed Relation between Events. Concrete Event types name their participants and occurrence-specific facts directly.
 
 ### Agency
 
@@ -49,7 +51,7 @@ From this structure, each successive layer requires constructs supplied by the l
 
 ## The Operating Cycle
 
-States describe present conditions, Goals identify intended States, and Entities act through Roles toward those Goals. Every Action is memorialized by an Event recording the States it changed, preserved, or revealed.
+States describe present conditions, Goals identify intended States, and Entities act through Roles toward those Goals. Every Action is memorialized by an Event whose concrete type and fields describe what occurred.
 
 Concepts determine what declarations mean, Contexts determine where meaning and action apply, and Rules govern Actions within those Contexts. Explicit Connections bind every declaration beneath the same organizational identity and constitutive order, making one coherent executable graph rather than separate descriptions.
 
@@ -63,6 +65,6 @@ The Python realization is organized under `packages/python/` as a uv workspace o
 - `ontok-vsm` provides `ontok.vsm` and depends on `ontok-core`.
 - `ontok-scim` provides `ontok.scim` and depends on `ontok-core`.
 
-The package shells are intentionally empty while their semantic models are completed.
+Core implementation proceeds one completed semantic layer at a time; extension packages remain empty until their specifications and Core dependencies are complete.
 
 The XML specification and its package evolve as one executable specification: XML defines meaning independently of Python, while construction through the Python types proves that a declaration satisfies that meaning.

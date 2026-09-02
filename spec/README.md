@@ -22,6 +22,8 @@ A module contains only the meanings it introduces:
 - names and descriptions define semantic intent;
 - `refines` expresses only a true semantic *is-a* relationship;
 - fields express mandatory dependencies on other constructs;
+- supporting scalars, values, unions, and relations make primitive construction complete;
+- derivations state facts implied by constructed fields;
 - laws define consequences that cannot be expressed by structure alone;
 - alignments connect external standards without reproducing them.
 

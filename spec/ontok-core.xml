@@ -2,6 +2,16 @@
 <ontok>
   <structure>
     <NodeId scalar="string" format="uuid7" encoding="canonical-lowercase">A canonical UUIDv7 identifier that distinguishes a Node.</NodeId>
+    <TypeId scalar="string" format="uri">The globally unique identity of a declared organizational type.</TypeId>
+    <SchemaVersion scalar="integer" minimum="1">The positive version of the schema defining a declared type.</SchemaVersion>
+    <VersionIncrement scalar="integer" minimum="1">A positive advance from one schema version to its successor.</VersionIncrement>
+    <SchemaSuccession>
+      <description>The succession of one organizational type's schema by a later version.</description>
+      <field name="type_id" type="TypeId"/>
+      <field name="predecessor" type="SchemaVersion"/>
+      <field name="increment" type="VersionIncrement"/>
+      <derivation name="successor" type="SchemaVersion">predecessor plus increment</derivation>
+    </SchemaSuccession>
     <Node>
       <description>A distinct thing represented in the organizational graph.</description>
       <field name="id" type="NodeId"/>
@@ -13,16 +23,61 @@
     </Connection>
   </structure>
   <reality>
-    <Entity refines="Node">A persistent thing that remains identifiable as its state and connections change.</Entity>
-    <Relation refines="Connection">A domain association between Nodes.</Relation>
+    <Timestamp scalar="date-time" timezone="required">A timezone-qualified point on the timeline.</Timestamp>
+    <PositiveDuration scalar="duration" minimum-exclusive="zero">A strictly positive length of elapsed time.</PositiveDuration>
+    <NonNegativeDuration scalar="duration" minimum="zero">A length of elapsed time that cannot precede its origin.</NonNegativeDuration>
+    <TemporalExtentKind scalar="string">
+      <value name="instant">A temporal extent occupying one point.</value>
+      <value name="interval">A temporal extent continuing for positive time.</value>
+    </TemporalExtentKind>
+    <Instant>
+      <description>A temporal extent occupying one point on the timeline.</description>
+      <field name="kind" type="TemporalExtentKind" fixed="instant"/>
+      <field name="at" type="Timestamp"/>
+      <derivation name="ends_at" type="Timestamp">at</derivation>
+    </Instant>
+    <Interval>
+      <description>A temporal extent beginning at one point and continuing for positive time.</description>
+      <field name="kind" type="TemporalExtentKind" fixed="interval"/>
+      <field name="begins_at" type="Timestamp"/>
+      <field name="duration" type="PositiveDuration"/>
+      <derivation name="ends_at" type="Timestamp">begins_at plus duration</derivation>
+    </Interval>
+    <TemporalExtent union="Instant Interval" discriminator="kind">The exhaustive temporal forms an occurrence can occupy.</TemporalExtent>
+    <Entity refines="Node">
+      <description>A particular thing whose identity persists as its conditions and associations change.</description>
+      <field name="entity_type" type="TypeId"/>
+    </Entity>
+    <RelationId scalar="string" format="uuid7" encoding="canonical-lowercase">A canonical UUIDv7 identifier that distinguishes a Relation.</RelationId>
+    <Relation refines="Connection">
+      <description>An identifiable domain association from one Node to another.</description>
+      <field name="id" type="RelationId"/>
+      <field name="relation_type" type="TypeId"/>
+    </Relation>
     <State refines="Node">
       <description>A condition of a Node that holds within the organizational graph.</description>
+      <field name="state_type" type="TypeId"/>
       <field name="subject" type="Node"/>
     </State>
+    <Memorialization>
+      <description>The creation of a durable memorial by one organizational Node after an occurrence.</description>
+      <field name="memorializer" type="Node"/>
+      <field name="delay" type="NonNegativeDuration"/>
+    </Memorialization>
     <Event refines="Node">
-      <description>A persistent record that an occurrence changed, preserved, or revealed State.</description>
-      <field name="state" type="State" cardinality="one-or-more"/>
+      <description>A durable memorial of one organizational occurrence.</description>
+      <field name="event_type" type="TypeId"/>
+      <field name="memorialization" type="Memorialization"/>
+      <field name="occurred" type="TemporalExtent"/>
+      <derivation name="recorded_at" type="Timestamp">occurred.ends_at plus memorialization.delay</derivation>
     </Event>
+    <CausationTypeId scalar="string" fixed="urn:ontok:relation:causation">The type identity carried by every Causation.</CausationTypeId>
+    <Causation refines="Relation">
+      <description>A Relation declaring that one Event caused another Event.</description>
+      <field name="relation_type" type="CausationTypeId"/>
+      <field name="source" type="Event"/>
+      <field name="target" type="Event"/>
+    </Causation>
   </reality>
   <agency>
     <Role refines="Node">An organizational capacity through which an Entity acts.</Role>

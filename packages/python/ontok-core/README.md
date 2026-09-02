@@ -12,4 +12,4 @@ Core realizes ONTOK's universal organizational type system and depends on no oth
 
 ## Status
 
-The package structure exists, but implementation is intentionally deferred until the Core semantic specification is complete.
+`NodeId`, `Node`, and `Connection` realize the structural foundation. `Entity`, `Relation`, and `Event`, together with their type, temporal, memorialization, and causation structures, realize the completed portions of organizational reality. `State` and later Core layers remain intentionally unimplemented until their semantic definitions and dependencies are complete.
