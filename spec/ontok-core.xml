@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontok>
+  <structure>
+    <Node>A distinct thing represented in the organizational graph.</Node>
+    <Connection>
+      <description>A typed link declaring how Nodes relate within the organizational graph.</description>
+      <field name="source" type="Node"/>
+      <field name="target" type="Node"/>
+    </Connection>
+  </structure>
+  <reality>
+    <Entity refines="Node">A persistent thing that remains identifiable as its state and connections change.</Entity>
+    <Relation refines="Connection">A domain association between Nodes.</Relation>
+    <State refines="Node">
+      <description>A condition of a Node that holds within the organizational graph.</description>
+      <field name="subject" type="Node"/>
+    </State>
+    <Event refines="Node">
+      <description>A persistent record that an occurrence changed, preserved, or revealed State.</description>
+      <field name="state" type="State" cardinality="one-or-more"/>
+    </Event>
+  </reality>
+  <agency>
+    <Role refines="Node">An organizational capacity through which an Entity acts.</Role>
+    <Goal refines="Node">
+      <description>An intended State toward which action is directed.</description>
+      <field name="state" type="State"/>
+    </Goal>
+    <Action refines="Node">
+      <description>Intentional activity performed or attempted by an Entity through a Role toward a Goal.</description>
+      <field name="actor" type="Entity"/>
+      <field name="role" type="Role"/>
+      <field name="goal" type="Goal"/>
+      <field name="event" type="Event"/>
+    </Action>
+  </agency>
+  <meaning>
+    <Concept refines="Node">What gives a declaration meaning through type identity, semantic refinement, and explicit alignment.</Concept>
+    <Context refines="Node">
+      <description>The States under which meaning or action applies.</description>
+      <field name="state" type="State" cardinality="one-or-more"/>
+    </Context>
+  </meaning>
+  <governance>
+    <Rule refines="Node">
+      <description>A declaration determining whether an Action is required, permitted, or prohibited within a Context.</description>
+      <field name="action" type="Action"/>
+      <field name="context" type="Context"/>
+    </Rule>
+  </governance>
+</ontok>

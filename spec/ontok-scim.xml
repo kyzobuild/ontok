@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontok module="scim" imports="ontok-core.xml" schema-standard="RFC 7643" protocol-standard="RFC 7644">
+  <identity>
+    <User refines="Entity" schema="urn:ietf:params:scim:schemas:core:2.0:User">
+      <description>A human, software, or agent identity represented by a SCIM User resource.</description>
+    </User>
+    <Group refines="Entity" schema="urn:ietf:params:scim:schemas:core:2.0:Group">
+      <description>A persistent collection of SCIM Users or Groups.</description>
+    </Group>
+    <EnterpriseUser refines="User" schema="urn:ietf:params:scim:schemas:extension:enterprise:2.0:User">
+      <description>A SCIM User carrying enterprise organizational attributes.</description>
+    </EnterpriseUser>
+    <Active refines="State">
+      <description>The enabled or disabled condition of a SCIM User.</description>
+      <field name="subject" type="User"/>
+    </Active>
+    <Membership refines="Relation">
+      <description>A Group's inclusion of a SCIM User or Group as a member.</description>
+      <field name="source" type="Group"/>
+      <field name="target" type="User | Group"/>
+    </Membership>
+    <Manager refines="Relation">
+      <description>An EnterpriseUser's reporting relationship to a managing User.</description>
+      <field name="source" type="EnterpriseUser"/>
+      <field name="target" type="User"/>
+    </Manager>
+    <RoleAssignment refines="Relation">
+      <description>A SCIM User's assignment to a declared organizational Role.</description>
+      <field name="source" type="User"/>
+      <field name="target" type="Role"/>
+    </RoleAssignment>
+  </identity>
+  <alignment>
+    <law name="resource-identity">A SCIM resource id identifies its ONTOK Entity; it does not create a separate identity Node.</law>
+    <law name="external-identity">A SCIM externalId identifies the Entity within its originating system.</law>
+    <law name="active-state">A SCIM User's active attribute determines its Active State.</law>
+    <law name="membership">Each SCIM Group member becomes one Membership Relation.</law>
+    <law name="management">An EnterpriseUser manager reference becomes one Manager Relation.</law>
+    <law name="role-resolution">A SCIM role value becomes a RoleAssignment only after resolving to a declared Role.</law>
+    <law name="attributes">All other SCIM attributes remain fields of their Entity rather than becoming generic Nodes.</law>
+    <law name="authority">SCIM identity data does not confer organizational authority; ONTOK Rules govern Actions.</law>
+    <law name="lifecycle">Successful SCIM protocol mutations are memorialized by ONTOK Events.</law>
+  </alignment>
+</ontok>

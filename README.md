@@ -1,68 +1,60 @@
 # ONTOK
 
-The Ontology Kernel: the closed set of ways a statement can function.
+ONTOK is a modular declarative programming language for making the organization itself programmable. Its small universal core defines how people, software, agents, resources, conditions, actions, meanings, and rules compose as one organizational graph; optional modules add standard organizational capabilities without enlarging that core.
 
-ONTOK is a notation, not an ontology. It states nothing about what exists, names no predicate, and
-assumes no substrate. It applies to ontologies other people already built, the way IPA applies to
-languages nobody designed for it. A statement functions the same way whether it lives in a Fabric
-ontology, a PowerBI semantic model, or a spreadsheet.
+## What Is an Organization?
 
-The end it serves: meaning is commensurable without a mind to reconcile it.
+An organization is a persistent constitutive order that gives one identity and agency to changing physical, social, digital, and abstract particulars. It joins them through explicit typed Connections and coordinates their capacities and actions toward organizational ends. Its identity persists when each successive configuration is recognized as the lawful continuation of the previous one.
 
-## The model
+## Modules
 
-Every statement has three positions: **subject, predicate, value**. What it holds over, what scopes
-it, and what it rests on are statements about it, because a fact carries several sources and holds
-in several scopes at once and a position holds one.
+Each implementation-independent XML specification defines one ONTOK module:
 
-A position holds a **referent**, a **literal**, a **statement**, a **kind**, or **nothing**.
+- **Core** defines the universal organizational type system.
+- **VSM** defines value streams as function-like compositions of organizational action.
+- **SCIM** aligns standard identity resources with the organizational graph.
 
-Twelve kinds, in declaration order:
+Further modules can add independently adoptable capabilities through explicit one-way dependencies.
 
-| | | |
-|---|---|---|
-| **first-order** | entity, event, state, role, relation | every bound position holds a referent or a literal |
-| **second-order** | claim, evidence, derivation, invalidation, rule, context | some position holds a statement |
-| **reflexive** | concept | some position holds a kind |
+## The Organizational Graph
 
-Three of them ground a statement: claim, evidence, derivation. Invalidation releases a ground rather
-than supplying one, which is why a withdrawn statement is still there and still answers.
+Everything represented is exactly one of:
 
-**The kind of a statement is the kind its predicate's concept reaches.** Classify a predicate once
-and every statement using it takes its kind with no further judgment. That is the whole act of
-transcription, and it is why `cust_no` needs two concepts and no rewrite:
+- **Node** — a distinct thing represented in the organizational graph.
+- **Connection** — a typed link declaring how Nodes relate within the organizational graph.
 
-```python
-from ontok import StatementConstructor
+From this structure, each successive layer requires constructs supplied by the layers before it.
 
-referent = lambda name: {"occupies": "referent", "name": name}
+### Reality
 
-StatementConstructor.validate_python({
-    "kind": "concept",
-    "subject": referent("cust_no"),
-    "predicate": referent("classifies"),
-    "value": referent("Customer"),
-})
-StatementConstructor.validate_python({
-    "kind": "concept",
-    "subject": referent("Customer"),
-    "predicate": referent("classifies"),
-    "value": {"occupies": "kind", "kind": "entity"},
-})
-```
+- **Entity** — a persistent particular.
+- **Relation** — a domain association.
+- **State** — a condition of a Node that holds within the organizational graph.
+- **Event** — a persistent record that an occurrence changed, preserved, or revealed one or more States.
 
-## Legality is representability
+### Agency
 
-Each kind types its positions to exactly the occupancies its formation rule admits. A reading
-outside them has no shape to be built in. Nothing rejects anything, there is no validation step
-whose absence lets something through, and no rule that can be edited to admit what should have been
-refused.
+- **Role** — a capacity through which an Entity acts.
+- **Goal** — an intended State.
+- **Action** — intentional activity performed or attempted by an Entity through a Role toward a Goal and memorialized by an Event.
 
-Construction is the only operation. Nothing evaluates, nothing reduces, nothing steps, and nothing
-is stored.
+### Meaning
 
-## Not this model's
+- **Concept** — what gives a declaration meaning through type identity, semantic refinement, and explicit alignment.
+- **Context** — the States under which meaning or action applies.
 
-The value space, and what a literal may be. Which predicates a domain admits, and what each one
-takes. How a statement is carried, identified, addressed, or admitted. Whether two referents are one
-referent.
+### Governance
+
+- **Rule** — what determines whether an Action is required, permitted, or prohibited within a Context.
+
+## The Operating Cycle
+
+States describe present conditions, Goals identify intended States, and Entities act through Roles toward those Goals. Every Action is memorialized by an Event recording the States it changed, preserved, or revealed.
+
+Concepts determine what declarations mean, Contexts determine where meaning and action apply, and Rules govern Actions within those Contexts. Explicit Connections bind every declaration beneath the same organizational identity and constitutive order, making one coherent executable graph rather than separate descriptions.
+
+## Reference Implementation
+
+The reference implementation will be a monorepo of independently publishable Python packages sharing the `ontok` namespace. Each semantic module will have a corresponding type-native package—such as `ontok.core`, `ontok.vsm`, and `ontok.scim`—whose dependencies mirror the specification imports.
+
+The XML specification and its package evolve as one executable specification: XML defines meaning independently of Python, while construction through the Python types proves that a declaration satisfies that meaning.

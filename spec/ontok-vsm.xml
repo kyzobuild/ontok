@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontok module="vsm" imports="ontok-core.xml">
+  <value-stream>
+    <Step refines="Action">
+      <description>An Action that transforms one State into another State within a ValueStream.</description>
+      <field name="input" type="State"/>
+      <field name="output" type="State"/>
+    </Step>
+    <Flow refines="Relation">
+      <description>The passage from one Step's output to another Step's input.</description>
+      <field name="source" type="Step"/>
+      <field name="target" type="Step"/>
+    </Flow>
+    <ValueStream refines="Node">
+      <description>A function-like composition of Steps that transforms an input State into a Goal's intended State.</description>
+      <field name="input" type="State"/>
+      <field name="output" type="State"/>
+      <field name="goal" type="Goal"/>
+      <field name="step" type="Step" cardinality="one-or-more"/>
+      <field name="flow" type="Flow" cardinality="zero-or-more"/>
+    </ValueStream>
+  </value-stream>
+  <composition>
+    <law name="membership">Every Flow in a ValueStream connects Steps in that ValueStream.</law>
+    <law name="compatibility">Each Flow's source output is its target input.</law>
+    <law name="entry">A ValueStream's input is the input of a Step with no incoming Flow.</law>
+    <law name="exit">A ValueStream's output is the output of a Step with no outgoing Flow.</law>
+    <law name="goal">A ValueStream's output is its Goal's intended State.</law>
+    <law name="continuity">Every Step lies on a Flow path from an entry Step to an exit Step.</law>
+  </composition>
+</ontok>

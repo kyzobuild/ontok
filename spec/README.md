@@ -1,0 +1,36 @@
+# ONTOK Specification
+
+This directory contains ONTOK's implementation-independent semantic specifications.
+
+## `ontok-*.xml`
+
+Every `ontok-*.xml` file defines one semantic module:
+
+- `ontok-core.xml` defines the universal organizational type system.
+- `ontok-vsm.xml` defines value streams as compositions of organizational action.
+- `ontok-scim.xml` aligns SCIM identity resources with ONTOK.
+- Future `ontok-<module>.xml` files may define additional standard capabilities.
+
+There may be any number of modules. This allows ONTOK to acquire major organizational capabilities without enlarging Core or forcing every organization to adopt every capability.
+
+## Module discipline
+
+Every module declares its imports explicitly. Dependencies are one-way: Core imports nothing, a module may import Core or earlier modules, and an imported module never acquires knowledge of an importing module.
+
+A module contains only the meanings it introduces:
+
+- names and descriptions define semantic intent;
+- `refines` expresses only a true semantic *is-a* relationship;
+- fields express mandatory dependencies on other constructs;
+- laws define consequences that cannot be expressed by structure alone;
+- alignments connect external standards without reproducing them.
+
+The specification files are not serialized organizational graphs and are not substitutes for external standards. They define the language in which organizational programs are declared.
+
+## Executable specification
+
+Each XML module and its corresponding type-native reference package form one executable specification. The XML defines meaning independently of any host language; the package realizes that meaning through types whose successful construction makes invalid declarations unrepresentable.
+
+The reference packages will be independently publishable members of one Python monorepo under the shared `ontok` namespace. Package dependencies must mirror XML imports exactly: `ontok.core` depends on no ONTOK package, while packages such as `ontok.vsm` and `ontok.scim` depend one-way on `ontok.core`.
+
+Only `README.md` and `ontok-*.xml` source files belong in this directory. Implementations, tests, generated files, and build artifacts belong elsewhere.
