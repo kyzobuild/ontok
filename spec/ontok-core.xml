@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ontok>
   <structure>
-    <Node>A distinct thing represented in the organizational graph.</Node>
+    <NodeId scalar="string" format="uuid7" encoding="canonical-lowercase">A canonical UUIDv7 identifier that distinguishes a Node.</NodeId>
+    <Node>
+      <description>A distinct thing represented in the organizational graph.</description>
+      <field name="id" type="NodeId"/>
+    </Node>
     <Connection>
       <description>A typed link declaring how Nodes relate within the organizational graph.</description>
       <field name="source" type="Node"/>
