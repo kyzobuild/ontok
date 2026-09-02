@@ -1,27 +1,29 @@
 [project]
-name = "ontok"
-version = "0.1.0"
-description = "The Ontology Kernel: the twelve ways a statement can function, as types."
+name = "ontok-workspace"
+version = "0.0.0"
+description = "Workspace for the ONTOK semantic module packages."
 readme = "README.md"
 requires-python = ">=3.13"
 authors = [{ name = "Kyle Tobin", email = "tobin.kyle@gmail.com" }]
-dependencies = ["pydantic>=2.9"]
+dependencies = []
 
-[build-system]
-requires = ["uv_build>=0.8.3,<0.9.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false
 
-[tool.uv.build-backend]
-module-root = "src"
-module-name = "ontok"
+[tool.uv.workspace]
+members = ["packages/*"]
 
 [dependency-groups]
-dev = ["ruff>=0.8", "mypy>=1.13", "pytest>=8"]
+dev = ["basedpyright", "import-linter", "pytest>=8", "ruff>=0.8"]
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+testpaths = ["tests", "packages"]
 
 [tool.ruff]
 target-version = "py313"
 line-length = 100
-src = ["src"]
+src = ["packages", "tests"]
 
 [tool.ruff.lint]
 select = ["E","W","F","I","N","UP","B","A","C4","PIE","RET","SIM","ARG","PTH","ERA","PL","TRY","RUF","ANN","S","FBT","TC","EM"]
@@ -33,19 +35,15 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel","pydantic.RootModel"]
 [tool.ruff.lint.isort]
 known-first-party = ["ontok"]
 
-[tool.mypy]
-python_version = "3.13"
-files = ["src"]
-plugins = ["pydantic.mypy"]
-strict = true
-disallow_any_explicit = true
-disallow_any_generics = true
-warn_unreachable = true
-no_implicit_reexport = true
-strict_equality = true
-extra_checks = true
+[tool.basedpyright]
+include = ["packages", "tests"]
+pythonVersion = "3.13"
+typeCheckingMode = "strict"
 
-[tool.pydantic-mypy]
-init_forbid_extra = true
-init_typed = true
-warn_required_dynamic_aliases = true
+[tool.importlinter]
+root_packages = ["ontok.core", "ontok.vsm", "ontok.scim"]
+
+[[tool.importlinter.contracts]]
+name = "ONTOK modules follow workspace dependencies"
+type = "layers"
+layers = ["ontok.vsm | ontok.scim", "ontok.core"]

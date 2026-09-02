@@ -55,6 +55,12 @@ Concepts determine what declarations mean, Contexts determine where meaning and 
 
 ## Reference Implementation
 
-The reference implementation will be a monorepo of independently publishable Python packages sharing the `ontok` namespace. Each semantic module will have a corresponding type-native package—such as `ontok.core`, `ontok.vsm`, and `ontok.scim`—whose dependencies mirror the specification imports.
+The reference implementation is organized as a uv workspace of independently publishable Python packages sharing the `ontok` namespace:
+
+- `ontok-core` provides `ontok.core`.
+- `ontok-vsm` provides `ontok.vsm` and depends on `ontok-core`.
+- `ontok-scim` provides `ontok.scim` and depends on `ontok-core`.
+
+The package shells are intentionally empty while their semantic models are completed.
 
 The XML specification and its package evolve as one executable specification: XML defines meaning independently of Python, while construction through the Python types proves that a declaration satisfies that meaning.

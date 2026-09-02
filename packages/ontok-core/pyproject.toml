@@ -1,0 +1,15 @@
+[project]
+name = "ontok-core"
+version = "0.1.0"
+description = "The universal ONTOK organizational type system."
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [{ name = "Kyle Tobin", email = "tobin.kyle@gmail.com" }]
+dependencies = ["pydantic>=2.9"]
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "ontok.core"
