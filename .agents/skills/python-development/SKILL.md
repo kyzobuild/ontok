@@ -1,6 +1,6 @@
 ---
 name: python-development
-description: The construct standard for all Python code in this repo — Type Construction Architecture (TCA): every meaning gets exactly one structure, every structure carries exactly one meaning, and construction is the proof. Use when writing, reviewing, or refactoring any Python code. Covers the 15 constructs, the four breaks, naming, construction discipline, and substrate verification.
+description: The construct standard for all Python code in this repo — Type Construction Architecture (TCA) every meaning gets exactly one structure, every structure carries exactly one meaning, and construction is the proof. Use when writing, reviewing, or refactoring any Python code. Covers the 15 constructs, the four breaks, naming, construction discipline, and substrate verification.
 ---
 
 # Python Development
