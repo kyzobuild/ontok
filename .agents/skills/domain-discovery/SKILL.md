@@ -9,7 +9,7 @@ Output of every step: written answers. No step passes on judgment. Every answer 
 
 ## 1. Evidence
 
-Render the real evidence: an API reply constructed through the vendor's SDK and printed as pretty JSON; a document or spec quoted. Read it before naming anything. Never author evidence from memory.
+Render the real evidence: instances of the thing, whole and unedited — an API reply constructed through the vendor's SDK and printed as pretty JSON; a document quoted; another program's model read as written. Read it before naming anything. Never author the evidence for this model: what you render was made for some other purpose than modeling this.
 
 ## 2. Things
 
