@@ -32,7 +32,7 @@ From this structure, each successive layer requires constructs supplied by the l
 - **State** — a condition of a Node that holds within the organizational graph.
 - **Event** — a durable memorial of one organizational occurrence.
 
-Every Reality construct carries explicit type identity. An Event declares its temporal extent and memorialization; its recording time follows from those constructed facts, while causation exists separately as a typed Relation between Events. Concrete Event types name their participants and occurrence-specific facts directly.
+An Event declares its temporal extent and memorialization; its recording time follows from those constructed facts, while causation exists separately as a Relation between Events.
 
 ### Agency
 
@@ -42,7 +42,7 @@ Every Reality construct carries explicit type identity. An Event declares its te
 
 ### Meaning
 
-- **Concept** — what gives a declaration meaning through type identity, semantic refinement, and explicit alignment.
+- **Concept** — the meaning of a declaration and its alignment to other declarations.
 - **Context** — the States under which meaning or action applies.
 
 ### Governance

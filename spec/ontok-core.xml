@@ -2,16 +2,6 @@
 <ontok>
   <structure>
     <NodeId scalar="string" format="uuid7" encoding="canonical-lowercase">A canonical UUIDv7 identifier that distinguishes a Node.</NodeId>
-    <TypeId scalar="string" format="uri">The globally unique identity of a declared organizational type.</TypeId>
-    <SchemaVersion scalar="integer" minimum="1">The positive version of the schema defining a declared type.</SchemaVersion>
-    <VersionIncrement scalar="integer" minimum="1">A positive advance from one schema version to its successor.</VersionIncrement>
-    <SchemaSuccession>
-      <description>The succession of one organizational type's schema by a later version.</description>
-      <field name="type_id" type="TypeId"/>
-      <field name="predecessor" type="SchemaVersion"/>
-      <field name="increment" type="VersionIncrement"/>
-      <derivation name="successor" type="SchemaVersion">predecessor plus increment</derivation>
-    </SchemaSuccession>
     <Node>
       <description>A distinct thing represented in the organizational graph.</description>
       <field name="id" type="NodeId"/>
@@ -46,13 +36,11 @@
     <TemporalExtent union="Instant Interval" discriminator="kind">The exhaustive temporal forms an occurrence can occupy.</TemporalExtent>
     <Entity refines="Node">
       <description>A particular thing whose identity persists as its conditions and associations change.</description>
-      <field name="entity_type" type="TypeId"/>
     </Entity>
     <RelationId scalar="string" format="uuid7" encoding="canonical-lowercase">A canonical UUIDv7 identifier that distinguishes a Relation.</RelationId>
     <Relation refines="Connection">
       <description>An identifiable domain association from one Node to another.</description>
       <field name="id" type="RelationId"/>
-      <field name="relation_type" type="TypeId"/>
     </Relation>
     <Position scalar="string" format="lower-hyphenated">One recognized position within a standing.</Position>
     <StandingKind scalar="string">
@@ -124,15 +112,12 @@
     </Memorialization>
     <Event refines="Node">
       <description>A durable memorial of one organizational occurrence.</description>
-      <field name="event_type" type="TypeId"/>
       <field name="memorialization" type="Memorialization"/>
       <field name="occurred" type="TemporalExtent"/>
       <derivation name="recorded_at" type="Timestamp">occurred.ends_at plus memorialization.delay</derivation>
     </Event>
-    <CausationTypeId scalar="string" fixed="urn:ontok:relation:causation">The type identity carried by every Causation.</CausationTypeId>
     <Causation refines="Relation">
       <description>A Relation declaring that one Event caused another Event.</description>
-      <field name="relation_type" type="CausationTypeId"/>
       <field name="source" type="Event"/>
       <field name="target" type="Event"/>
     </Causation>
@@ -152,7 +137,7 @@
     </Action>
   </agency>
   <meaning>
-    <Concept refines="Node">What gives a declaration meaning through type identity, semantic refinement, and explicit alignment.</Concept>
+    <Concept refines="Node">The meaning of a declaration and its alignment to other declarations.</Concept>
     <Context refines="Node">
       <description>The States under which meaning or action applies.</description>
       <field name="state" type="State" cardinality="one-or-more"/>

@@ -11,10 +11,10 @@ class Node(BaseModel):
     id: NodeId = Field(description="The identifier that distinguishes this Node.")
 
 
-class Connection(BaseModel):
+class Connection[SourceT: Node, TargetT: Node](BaseModel):
     """A typed link declaring how Nodes relate within the organizational graph."""
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    source: Node = Field(description="The Node from which the Connection originates.")
-    target: Node = Field(description="The Node at which the Connection terminates.")
+    source: SourceT = Field(description="The Node from which the Connection originates.")
+    target: TargetT = Field(description="The Node at which the Connection terminates.")

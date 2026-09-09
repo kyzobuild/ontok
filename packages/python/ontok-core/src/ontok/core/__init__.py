@@ -1,6 +1,5 @@
 from ontok.core.entity import Entity as Entity
 from ontok.core.event import Causation as Causation
-from ontok.core.event import CausationTypeId as CausationTypeId
 from ontok.core.event import Event as Event
 from ontok.core.event import Memorialization as Memorialization
 from ontok.core.identity import NodeId as NodeId
@@ -32,7 +31,3 @@ from ontok.core.time import PositiveDuration as PositiveDuration
 from ontok.core.time import TemporalExtent as TemporalExtent
 from ontok.core.time import TemporalExtentKind as TemporalExtentKind
 from ontok.core.time import Timestamp as Timestamp
-from ontok.core.type import SchemaSuccession as SchemaSuccession
-from ontok.core.type import SchemaVersion as SchemaVersion
-from ontok.core.type import TypeId as TypeId
-from ontok.core.type import VersionIncrement as VersionIncrement
