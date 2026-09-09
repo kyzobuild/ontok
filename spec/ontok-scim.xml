@@ -12,7 +12,6 @@
     </EnterpriseUser>
     <Active refines="State">
       <description>The enabled or disabled condition of a SCIM User.</description>
-      <field name="subject" type="User"/>
     </Active>
     <Membership refines="Relation">
       <description>A Group's inclusion of a SCIM User or Group as a member.</description>

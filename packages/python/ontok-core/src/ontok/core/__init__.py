@@ -5,6 +5,7 @@ from ontok.core.event import Memorialization as Memorialization
 from ontok.core.identity import NodeId as NodeId
 from ontok.core.relation import Relation as Relation
 from ontok.core.relation import RelationId as RelationId
+from ontok.core.role import Role as Role
 from ontok.core.state import Contraries as Contraries
 from ontok.core.state import Graded as Graded
 from ontok.core.state import GradedStanding as GradedStanding

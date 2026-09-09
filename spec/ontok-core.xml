@@ -123,7 +123,9 @@
     </Causation>
   </reality>
   <agency>
-    <Role refines="Node">An organizational capacity through which an Entity acts.</Role>
+    <Role refines="Node">
+      <description>An organizational capacity through which an Entity acts.</description>
+    </Role>
     <Goal refines="Node">
       <description>An intended State toward which action is directed.</description>
       <field name="state" type="State"/>
