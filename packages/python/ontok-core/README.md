@@ -12,4 +12,4 @@ Core realizes ONTOK's universal organizational type system and depends on no oth
 
 ## Status
 
-`NodeId`, `Node`, and `Connection` realize the structural foundation. `Entity`, `Relation`, `State`, and `Event`, together with their temporal, memorialization, and causation structures, realize organizational reality. `Role` realizes the office through which an Entity acts. Goal, Action, and later Core layers remain unimplemented until their semantic definitions and dependencies are complete.
+`NodeId`, `Node`, and `Connection` realize the structural foundation. `Entity`, `Relation`, and `Event`, together with their temporal, memorialization, and causation structures, realize those portions of organizational reality. `State` is an empty sortal. `Role` realizes the office through which an Entity acts. Goal, Action, and later Core layers remain unimplemented until their semantic definitions and dependencies are complete.
