@@ -1,8 +1,7 @@
 from enum import StrEnum
-from functools import cached_property
 from typing import Annotated, Literal, Self
 
-from pydantic import Field, RootModel, model_validator
+from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
 
 from ontok.core.structure import Node
 
@@ -41,7 +40,23 @@ class GradedStanding(RootModel[tuple[Position, ...]], frozen=True):
         return self
 
 
-class Plain(Node):
+class Contraries(RootModel[frozenset[Position]], frozen=True):
+    """The positions a State excludes."""
+
+    root: frozenset[Position] = Field(min_length=1)
+
+
+class Rank(RootModel[int], frozen=True):
+    """How high a position sits on a graded standing, lowest at zero."""
+
+    root: int = Field(ge=0)
+
+
+class State(Node):
+    """Where a Node stands among the recognized positions of one standing."""
+
+
+class Plain(State):
     """The position a Node holds among unordered positions that exclude one another."""
 
     kind: Literal[StandingKind.PLAIN] = StandingKind.PLAIN
@@ -57,14 +72,14 @@ class Plain(Node):
             raise ValueError(msg)
         return self
 
-    @cached_property
-    def contraries(self) -> frozenset[Position]:
+    @property
+    def contraries(self) -> Contraries:
         """The positions this State excludes."""
 
-        return self.standing.root - {self.at}
+        return Contraries(self.standing.root - {self.at})
 
 
-class Graded(Node):
+class Graded(State):
     """The position a Node holds on an ordered standing."""
 
     kind: Literal[StandingKind.GRADED] = StandingKind.GRADED
@@ -80,25 +95,96 @@ class Graded(Node):
             raise ValueError(msg)
         return self
 
-    @cached_property
-    def contraries(self) -> frozenset[Position]:
+    @property
+    def contraries(self) -> Contraries:
         """The positions this State excludes."""
 
-        return frozenset(self.standing.root) - {self.at}
+        return Contraries(frozenset(self.standing.root) - {self.at})
 
-    @cached_property
-    def rank(self) -> int:
+    @property
+    def rank(self) -> Rank:
         """How high this position sits on its standing, lowest at zero."""
 
-        return self.standing.root.index(self.at)
-
-    def outranks(self, other: "Graded") -> bool:
-        """Whether this State sits higher than another State of the same standing."""
-
-        if self.standing != other.standing:
-            msg = "Only States of one standing compare."
-            raise ValueError(msg)
-        return self.rank > other.rank
+        return Rank(self.standing.root.index(self.at))
 
 
-State = Annotated[Plain | Graded, Field(discriminator="kind")]
+StateForms = Annotated[Plain | Graded, Field(discriminator="kind")]
+
+
+class OutrankingKind(StrEnum):
+    """How two Graded States sit relative to one standing."""
+
+    OUTRANKS = "outranks"
+    MATCHES = "matches"
+    OUTRANKED = "outranked"
+    INCOMPARABLE = "incomparable"
+
+
+class Outranks(BaseModel):
+    """This State sits higher than the other on one standing."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    kind: Literal[OutrankingKind.OUTRANKS] = OutrankingKind.OUTRANKS
+    subject: Graded
+    other: Graded
+
+
+class Matches(BaseModel):
+    """This State sits at the same place as the other on one standing."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    kind: Literal[OutrankingKind.MATCHES] = OutrankingKind.MATCHES
+    subject: Graded
+    other: Graded
+
+
+class Outranked(BaseModel):
+    """This State sits lower than the other on one standing."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    kind: Literal[OutrankingKind.OUTRANKED] = OutrankingKind.OUTRANKED
+    subject: Graded
+    other: Graded
+
+
+class Incomparable(BaseModel):
+    """The States do not share a standing."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    kind: Literal[OutrankingKind.INCOMPARABLE] = OutrankingKind.INCOMPARABLE
+    subject: Graded
+    other: Graded
+
+
+OutrankingRelation = Annotated[
+    Outranks | Matches | Outranked | Incomparable,
+    Field(discriminator="kind"),
+]
+
+
+class Outranking(BaseModel):
+    """Whether one Graded State sits higher than another."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    subject: Graded
+    other: Graded
+
+    @property
+    def answer(self) -> OutrankingRelation:
+        """How the subject sits relative to the other."""
+
+        return next(
+            (
+                {
+                    (True, False): Outranks(subject=self.subject, other=self.other),
+                    (False, True): Outranked(subject=self.subject, other=self.other),
+                    (False, False): Matches(subject=self.subject, other=self.other),
+                }[
+                    self.subject.rank.root > self.other.rank.root,
+                    self.subject.rank.root < self.other.rank.root,
+                ]
+                for shared in (self.subject.standing == self.other.standing,)
+                if shared
+            ),
+            Incomparable(subject=self.subject, other=self.other),
+        )
