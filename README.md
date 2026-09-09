@@ -1,43 +1,36 @@
 # ONTOK
 
-**Make organizational meaning explicit, portable, and executable.**
+## Write the organization as software.
 
-ONTOK is a modular declarative semantic language for representing an organization as a machine-operable graph and carrying meaning across the independently evolving systems that implement it. Its twelve-primitive Core provides a small grammar for organizational structure, reality, agency, meaning, and governance. Semantic Topology organizes the meanings that emerge across those declarations, while optional modules add reusable organizational capabilities without enlarging the kernel.
+ONTOK is a modular declarative semantic language for expressing the kinds an organization contains, constructing facts that satisfy those kinds, and carrying shared meaning across software that will never share one schema.
 
-ONTOK is designed for organizations in which applications, data platforms, knowledge graphs, policies, people, and intelligent systems all participate in representing and operating the same business. Those systems do not need to share one schema, database, programming language, graph technology, or vendor. They need a durable way to share meaning.
+An organization already has customers, invoices, employees, roles, approvals, states, events, goals, policies, relationships, and concepts. Software usually represents fragments of that reality in local schemas and application models. ONTOK provides a small semantic kernel from which those organizational kinds can be declared directly in software.
 
-## Why ONTOK Exists
+```python
+class Invoice(Entity):
+    ...
 
-Every significant system contains a partial model of the organization it serves. A CRM defines customers and accounts. An ERP defines products, transactions, and obligations. A data platform introduces analytical entities and measures. A knowledge graph creates another representation. Policies establish concepts and constraints in prose. Application code embeds distinctions that may exist nowhere else. Agents increasingly construct additional working models from schemas, retrieved documents, tool descriptions, and the context available during execution.
+class HireApproved(Event):
+    ...
 
-Different representations are not necessarily defects. They usually exist for different purposes. A customer-facing application may legitimately use a narrower idea of `Customer` than a financial platform. A graph designed for fraud analysis may organize transactions differently from a servicing ontology. The architectural problem is that most organizations have no durable semantic layer capable of expressing what these representations mean, how they correspond, where they differ, and which meanings should survive the systems that currently implement them.
+class ReportsTo(Relation):
+    ...
 
-Traditional enterprise modeling has often tried to solve this by defining a canonical model and asking every system to conform to it. ONTOK separates semantic coherence from implementation convergence. Local models remain legitimate while the organization gains a common language for describing and relating them.
-
-That becomes increasingly important as software assumes more operational responsibility. Semantic inconsistency is inconvenient when systems merely record work. It becomes part of execution when applications, agents, and automated processes interpret concepts such as approval, entitlement, risk, obligation, customer, employee, product, incident, or authority.
-
-## One Organization, Many Models
-
-Consider a business with one major application architecture represented in AWS Neptune and another modeled independently in Microsoft Fabric.
-
-```text
-AWS Neptune                 Microsoft Fabric
-
-Customer                    Member
-Account                     FinancialAccount
-Transaction                 Payment
-Merchant                    Counterparty
+class HiringManager(Role):
+    ...
 ```
 
-Both models may be internally correct, and neither needs to be treated as the canonical representation of the business. The useful question is how their meanings correspond.
+You do not call ONTOK as a service. You import the kernel and grow an ontology.
 
-ONTOK can represent that `Customer` and `Member` are equivalent in the relevant organizational context, that `FinancialAccount` is broader than `Account`, that `Transaction` is only a close match for `Payment`, or that `Merchant` overlaps with `Counterparty` without being interchangeable with it.
+A CRM row, SCIM resource, ticket, graph record, API payload, document interpretation, or agent proposal can then become an instance of a declared organizational kind. The declaration constructs successfully or it does not. Meaning that matters to the program no longer has to be reconstructed from field names, prompts, integration code, and documentation at every boundary.
 
-The source systems remain independent. The semantic relationships become explicit organizational structure rather than knowledge hidden in integration code, architecture diagrams, or individual people's heads.
+ONTOK does not require the organization to become one application, one graph, or one schema. It gives independently evolving systems a common semantic grammar.
 
-## ONTOK Core
+---
 
-ONTOK Core is a deliberately small kernel of twelve primitives.
+## The kernel
+
+ONTOK Core contains twelve primitives:
 
 ```text
 Structure
@@ -63,153 +56,181 @@ Governance
   Rule
 ```
 
-The kernel does not attempt to enumerate the kinds of customers, invoices, products, people, systems, policies, resources, or workflows an organization might contain. Those domain kinds are created by refining the kernel.
+The progression matters: **structure → reality → agency → meaning → governance**.
 
-`Node` and `Connection` establish the graph. `Entity`, `Relation`, `State`, and `Event` describe organizational reality: what persists, how things associate, where they stand, and what occurs. `Role`, `Goal`, and `Action` represent intentional organizational agency. `Concept` and `Context` make meaning and applicability explicit. `Rule` governs action within that same organizational model.
+`Node` and `Connection` establish the graph. `Entity`, `Relation`, `State`, and `Event` let the organization represent what persists, how things associate, where they stand, and what occurs. `Role`, `Goal`, and `Action` make intentional organizational behavior explicit. `Concept` and `Context` represent meaning and the conditions under which meaning or action applies. `Rule` governs action within that same model.
 
-Supporting types provide mechanics such as identity, temporal extent, state standings, schema succession, and memorialization. They support the twelve primitives without expanding the kernel.
+Twelve primitives are enough to provide the grammar. They are not an enterprise data model. A bank, manufacturer, hospital, retailer, or software company should not get its domain ontology from ONTOK Core.
 
-## Refinement: From Kernel to Organization
+It should write its own.
 
-The Core primitives are sortals. Domain semantics are expressed by refining them through ordinary classes rather than attaching instance-level type identifiers.
+### The class is the kind
 
-An organization might define:
+ONTOK expresses domain kinds through refinement.
 
 ```python
-from ontok.core import Entity, Event, Relation
+class Customer(Entity):
+    ...
 
-class Invoice(Entity):
-    pass
+class PaymentReceived(Event):
+    ...
 
-class HireApproved(Event):
-    pass
+class Owns(Relation):
+    ...
 
-class ReportsTo(Relation):
-    pass
+class AccountOwner(Role):
+    ...
 ```
 
-Modules use the same mechanism. ONTOK VSM and ONTOK SCIM can define richer organizational kinds from the same Core without adding new universal primitives merely because a particular domain needs them.
+`Customer(Entity)` is the kind. `PaymentReceived(Event)` is the kind. `Owns(Relation)` is the kind.
 
-This keeps the kernel small while allowing the language to become specific wherever the organization requires specificity. The class is the kind; the graph contains instances of those refined organizational kinds.
+Instances carry organizational facts. Classes carry organizational kinds.
 
-## Meaning and Alignment
+That distinction keeps the kernel small while allowing the organizational model to become arbitrarily specific. Modules refine the kernel in the same way, and organizations can build their own semantic packages without pushing every useful concept back into Core.
 
-Structural precision does not guarantee shared meaning. Two classes can be rigorously defined and still represent overlapping, conflicting, or differently scoped organizational ideas.
+---
 
-`Concept` provides the semantic layer through which declarations acquire meaning and can be aligned. It allows the organization to express relationships such as a field called `cust_no` meaning `Customer`, or a `Member` concept in one system corresponding to a `Customer` concept elsewhere.
+## Construct organizational facts
 
-This does not require local declarations to be renamed or collapsed. ONTOK preserves the distinction between the declaration and the meaning assigned to it.
+The important thing about ONTOK is not that it uses Python classes. It is that organizational facts can retain their meaning as they move through software.
 
-Once an organization contains many Concepts, however, another problem appears. Individual meanings exist, but the larger structure among them is still implicit.
+A pipeline can construct a `Customer`. An identity feed can construct an organizational person and membership. A workflow can construct a `HireApproved` Event. Software claiming that an organizational Action occurred can represent the Entity that acted, the Role through which it acted, the Goal toward which it acted, and the Event memorializing what occurred.
 
-Semantic Topology addresses that problem.
+Those values can then cross application boundaries without being reduced to records whose interpretation must be independently rediscovered by every consumer.
 
-## Semantic Topology
+A graph can persist them. A queue can move them. A workflow can carry them. An agent can propose them. A Rule can constrain them. Another system can receive them.
 
-Semantic Topology is the evolving organization of meaning across the organizational graph.
+The execution technology can change without changing the semantic grammar.
 
-A topology contains Concepts and explicit semantic Relations among them. ONTOK initially distinguishes relationships such as equivalence, broader meaning, association, close matching, and overlap. A relationship may also be conditional on Context when two meanings correspond only under particular organizational conditions.
+---
 
-Returning to the Neptune and Fabric example, an organization's topology might contain:
+## Meaning is bigger than type
+
+A local type tells a program what kind of thing it has declared. It does not tell the organization how that declaration relates to meanings defined somewhere else.
+
+A CRM may have `Customer`. A servicing platform may have `Member`. A database column named `cust_no` may encode the customer concept without saying so explicitly anywhere in the system.
+
+`Concept` exists for meaning and alignment.
 
 ```text
-Customer         Equivalent     Member
-FinancialAccount Broader        Account
-Transaction      CloseMatch     Payment
-Merchant         Overlap        Counterparty
+cust_no  ──means────────→  Customer
+
+Member   ──corresponds──→  Customer
 ```
 
-The topology is not a taxonomy supplied by ONTOK and is not another canonical enterprise schema. It belongs to the organization and develops from the meanings that actually appear in its systems and operations.
+This separation matters because local models are allowed to remain local. ONTOK does not need to rename every declaration or force every system onto the same class hierarchy before the organization can understand them together.
 
-A Semantic Topology also evolves. New systems introduce new Concepts, operating distinctions change, formerly equivalent meanings diverge, acquisitions bring parallel vocabularies, and the organization may discover structure that previously existed only implicitly. ONTOK represents that evolution through successive validated revisions while preserving Concept identity wherever the underlying meaning remains stable.
+But once an organization has many Concepts, another problem appears. It has explicit meanings without an explicit structure among those meanings.
 
-Semantic Topology completes the meaning layer of ONTOK because it allows the organization to represent not only individual meanings, but also the shape formed among those meanings across independently evolving systems.
+That is what ONTOK Semantic Topology adds.
 
-## An Emergent Semantic Model
+---
 
-A useful organizational semantic model does not need to begin with a multi-year effort to define the entire enterprise from the top down. Semantic Topology can develop incrementally from the organization that already exists.
+## ONTOK ST: Semantic Topology
 
-Candidate Concepts and relationships may be discovered from application classes, schemas, APIs, graphs, event contracts, documents, policies, code, external ontologies, and operating language. Some relationships can be established deterministically. Others require semantic judgment.
+**ONTOK ST is the evolving structure of meaning across the organization.**
 
-Language models are useful here because they can interpret names, documentation, examples, relationships, and surrounding context to propose that two Concepts correspond, that one is broader than another, or that a previously valid alignment appears to have drifted. ONTOK gives those proposals a durable representation that software can validate and govern.
+Concept gives a declaration meaning. ONTOK ST lets independently developed meanings form an organizational structure.
 
-The result is an organizational semantic model that can be observed, declared, tested, corrected, and evolved as part of normal operation rather than treated as a static artifact produced once by an architecture program.
-
-## What This Architecture Makes Possible
-
-### Semantic interoperability
-
-ONTOK allows systems to share meaning without requiring them to share physical storage or identical schemas. Neptune, Fabric, relational systems, event streams, application APIs, RDF graphs, documents, and other representations can remain locally appropriate while participating in the same organizational semantics.
-
-This goes beyond serialization compatibility. Two systems may already be able to exchange JSON while disagreeing completely about what the values mean. ONTOK operates at the semantic layer above that exchange.
-
-### Semantic continuity
-
-Applications are often shorter-lived than the meanings they implement. Concepts such as `Customer`, `Approval`, `Product`, `Obligation`, or `Risk` should not have to be reinvented every time the organization changes platforms.
-
-By separating organizational meaning from local implementation, ONTOK allows system replacement, re-platforming, restructuring, and acquisition to occur while preserving an explicit account of the semantics that need to survive the change.
-
-### Semantic observability
-
-Organizations monitor infrastructure, application behavior, and data quality, but semantic health is usually visible only through downstream symptoms. Once Concepts and alignments become explicit, software can identify duplicate meanings, unresolved mappings, competing definitions, broken equivalences, hierarchy problems, and concepts whose implementations have drifted apart.
-
-Schema drift identifies structural change. Semantic drift identifies a change in what the organization means.
-
-### Portable automation
-
-Queries, policies, applications, and agents can increasingly depend on organizational meaning rather than only on the names and structures exposed by a particular system.
-
-A request such as "show customers whose payment behavior changed after entering delinquency" contains organizational concepts that may be realized across several platforms. ONTOK can provide the semantic layer through which a query planner, application, or agent determines what those concepts correspond to in each system.
-
-A business rule can similarly be expressed in terms of organizational Entities, States, Roles, Actions, Concepts, and Contexts while integrations determine how that rule is enforced by the current application landscape.
-
-ONTOK is not itself a graph database, query engine, workflow system, or agent framework. It provides semantic structure those systems can share.
-
-## Models Infer, Software Governs
-
-ONTOK assumes language models will increasingly participate in ordinary software. Semantic interpretation is one of their useful roles because many mappings cannot be derived from structure alone. A model can inspect schemas, documentation, examples, policy, surrounding relationships, and actual usage to propose semantic structure.
-
-That inference does not make the model the authority over the organizational graph. Software can decide when inference is requested, what evidence is available, which validations apply, who or what may accept a change, and how an approved declaration becomes part of the topology.
+Consider one business with an application graph in AWS Neptune and another domain modeled independently in Microsoft Fabric:
 
 ```text
-observe systems and graph
-          ↓
-request bounded inference
-          ↓
-construct proposed ONTOK declaration
-          ↓
-validate semantics and authority
-          ↓
-accept, reject, or revise
-          ↓
-publish the next topology revision
+AWS Neptune                 Microsoft Fabric
+
+Customer                    Member
+Account                     FinancialAccount
+Transaction                 Payment
+Merchant                    Counterparty
 ```
 
-This preserves a useful division of responsibility. Models contribute bounded inference and judgment where ambiguity exists; software owns control flow, durable state, validation, authorization, and execution.
+Neither model needs to become canonical. Both may be correct for the work they perform.
 
-The same ONTOK structures remain usable in systems that contain no language model at all.
+ONTOK ST can make their semantic relationships explicit:
 
-## Modular by Design
+```text
+Customer          Equivalent     Member
+FinancialAccount  Broader        Account
+Transaction       CloseMatch     Payment
+Merchant          Overlap        Counterparty
+```
 
-ONTOK Core defines the universal organizational grammar. Additional capabilities are developed as modules with explicit one-way dependencies rather than being pushed into the kernel.
+Those relationships now belong to the organization rather than to Neptune, Fabric, an integration mapping, or the memory of the people who built them.
+
+ONTOK ST is not a universal taxonomy. Every organization develops its own topology because every organization develops its own meanings and distinctions. It is also not a thirteenth primitive; it is a module constructed from the semantic grammar ONTOK already provides, principally Concepts, Relations, and Context.
+
+The topology can emerge from the organization that already exists: classes, schemas, graphs, APIs, events, documents, policies, code, external ontologies, and operating language can all reveal semantic structure.
+
+It also evolves. New systems introduce new Concepts. Definitions drift. Concepts split or merge. Acquisitions introduce parallel vocabularies. A relationship once treated as equivalent may become only a close match, or may apply only within a particular Context.
+
+That evolution can be observed and governed:
+
+```text
+observe
+  → discover or infer
+  → propose
+  → validate
+  → accept, reject, or revise
+  → continue observing
+```
+
+Deterministic software can establish relationships where semantics are known mechanically. Models can help interpret ambiguous schemas, documents, code, policies, and graph neighborhoods. ONTOK gives the resulting proposals a common form that software can validate, persist, reject, revise, and govern.
+
+SKOS is a natural interoperability model for ONTOK ST because it already provides standardized representations for Concepts, concept schemes, broader and narrower relationships, related concepts, and semantic mappings such as exact and close matches. SKOS is an interchange vocabulary; ONTOK ST is the organizational capability.
+
+---
+
+## Many runtimes, one semantic layer
+
+ONTOK does not need to own execution.
+
+Temporal can orchestrate a workflow. Pydantic Graph can run a graph. NATS can move messages. Neptune can persist a graph. Fabric can expose an ontology. PostgreSQL can hold application state. An LLM can infer.
+
+ONTOK defines what the organizational values moving through those systems mean.
+
+That distinction becomes especially important in agentic systems. A typed agent can receive an `Invoice`, propose a `HireApproved`, act through a `Role`, pursue a `Goal`, or return an Event. A graph runner or workflow engine can move those values through a deterministic control structure without inventing a parallel semantic model.
+
+Pydantic's agents and graphs describe how a run proceeds. **ONTOK describes what the run is allowed to be.**
+
+A vast agent architecture without shared semantics is still a collection of systems inventing meaning at its boundaries. ONTOK gives those systems one organizational grammar without requiring them to share one runtime.
+
+Language models fit naturally into that architecture, but they do not own it. Models can discover Concepts, propose alignments, classify declarations, explain semantic differences, and detect candidate drift. Software owns control flow, validation, durable state, authority, and execution.
+
+Models infer. Software governs.
+
+---
+
+## Core stays small. Modules refine it.
+
+ONTOK grows through modules rather than kernel inflation.
 
 The project currently includes:
 
-* `ontok-core`, the universal semantic foundation.
-* `ontok-vsm`, Value Stream Mapping semantics built from Core.
-* `ontok-scim`, SCIM-aligned identity and organizational semantics built from Core.
+```text
+ontok-core
+ontok-vsm
+ontok-scim
+ontok-st
+```
 
-A value stream is an important organizational structure, but it is not a universal primitive. SCIM provides useful standardized identity semantics, but those semantics do not belong inside the kernel. Modules allow ONTOK to become richer without confusing domain utility with ontological necessity.
+`ontok-core` provides the twelve-primitive kernel.
 
-Organizations can use the same refinement mechanism to create their own semantic packages.
+`ontok-vsm` expresses Value Stream Mapping through ONTOK so performed work and value-stream structure can participate in the same organizational graph as the rest of the business.
 
-## Specification and Realization
+`ontok-scim` aligns SCIM identity and organizational structures with ONTOK so standardized identity resources can participate in broader organizational semantics.
 
-ONTOK is defined independently of any single programming language.
+`ontok-st` provides Semantic Topology: the evolving structure of meaning among independently declared Concepts, with SKOS as an interchange vocabulary.
 
-Each module has an implementation-independent specification describing its constructs, refinements, constraints, and dependencies. Language implementations realize those semantics through the native type systems and tooling of their ecosystems.
+A value stream is useful, but it is not a universal primitive. SCIM semantics are useful, but they do not belong in the kernel. Modules let ONTOK become richer while preserving a small universal Core.
 
-The Python implementation is therefore an executable realization of ONTOK rather than the definition of ONTOK itself.
+Organizations can refine the same kernel into their own packages.
+
+---
+
+## Specification and realization
+
+ONTOK is not defined by its Python implementation.
+
+Each module has an implementation-independent specification that defines its semantics, constraints, refinements, and dependencies. Language implementations realize that semantic contract using the native type systems and tooling of their ecosystems.
 
 ```text
 ONTOK specification
@@ -218,74 +239,55 @@ semantic contract
         ↓
 language realization
         ↓
-executable declarations
+executable organizational model
 ```
 
-The current specifications are expressed in XML. The Python realization implements them as strict Pydantic classes and validators. The specification and implementation evolve together so that the language remains both implementation-independent and directly usable inside real programs.
+The current specifications are expressed in XML. The Python realization uses strict Pydantic models so ONTOK declarations can be constructed and validated directly inside ordinary software.
 
-## Standards and Interoperability
+The specification says what ONTOK means. The realization makes those semantics executable.
 
-ONTOK does not need to replace standards that already provide useful semantic infrastructure. RDF, OWL, SHACL, SKOS, SCIM, and related standards can be used where they improve interchange, validation, or integration.
+Python is the first realization, not the definition of the language.
 
-Semantic Topology, for example, maps naturally to SKOS concepts, concept schemes, and semantic relationships. ONTOK SCIM can connect standardized identity resources to the larger organizational graph. RDF, OWL, and SHACL can provide external semantic representations where those ecosystems are appropriate.
+ONTOK can also project into established standards where they provide useful interoperability. RDF, OWL, and SHACL can represent and validate semantic graphs; SKOS aligns naturally with ONTOK ST; SCIM underpins the identity semantics of `ontok-scim`. Developers can use ONTOK as ordinary typed software without making those standards the programming surface of every application.
 
-These standards are interoperability surfaces rather than the required application programming model. A developer should be able to use ONTOK as ordinary typed software without first becoming a specialist in the Semantic Web stack.
+---
 
-## Using ONTOK
+## Repository
 
-The Python realization is designed to make ONTOK ordinary program structure.
+This repository is the canonical home of ONTOK. It contains the implementation-independent specifications, project documentation, language realizations, modules, examples, and tests.
 
-```python
-from ontok.core import Entity, Relation
-
-class Customer(Entity):
-    pass
-
-class Account(Entity):
-    pass
-
-class Owns(Relation):
-    source: Customer
-    target: Account
-```
-
-The value is not the amount of code required to declare `Customer`. The value is that the declaration has a defined semantic role within a larger organizational graph and can participate in validation, graph projection, Semantic Topology, query planning, governance, standards interchange, and intelligent software.
-
-Pipelines, services, applications, graph adapters, query systems, and agent harnesses can consume and emit the same ONTOK structures directly.
-
-## Repository Structure
-
-This repository is the canonical home of ONTOK. It contains the implementation-independent specifications, core documentation, language realizations, extension modules, examples, and tests.
-
-Language realizations live under:
+Language realizations live beneath:
 
 ```text
 packages/<language>/
 ```
 
-so each language can use its native workspace, package management, validation, and publishing conventions while implementing the same ONTOK specifications.
-
-The Python realization lives under `packages/python/` as a `uv` workspace of independently publishable packages sharing the `ontok` namespace:
+The Python realization is a `uv` workspace under:
 
 ```text
 packages/python/
 ├── ontok-core/    → ontok.core
 ├── ontok-vsm/     → ontok.vsm
-└── ontok-scim/    → ontok.scim
+├── ontok-scim/    → ontok.scim
+└── ontok-st/      → ontok.st
 ```
 
-`ontok-vsm` and `ontok-scim` depend on `ontok-core`. Future modules should preserve the same explicit dependency direction so optional semantics do not leak backward into the universal kernel.
+The root documentation describes ONTOK as a language and product. Module and package documentation cover their specific semantics and implementation surfaces.
 
-The root documentation describes ONTOK as a language and product. Module and package documentation can go deeper into their specific semantics, APIs, and implementation details.
+---
 
-## ONTOK and the Automated Organization
+## The Automated Organization
 
-ONTOK is built around a broader premise: organizations are becoming increasingly executable.
+Organizations have always had entities, states, events, relationships, roles, goals, actions, concepts, contexts, and rules. What they have rarely had is one explicit semantic system through which those structures can remain coherent across the software that implements them.
 
-An organization already has entities, states, events, relationships, roles, goals, actions, concepts, contexts, and rules whether its software represents those things explicitly or not. Historically, much of the semantic continuity among them has been supplied by people. Humans knew that different systems used different words for roughly the same thing, understood when a policy exception applied, reconciled inconsistent representations, translated between organizational vocabularies, and carried context that software never modeled.
+People supplied that missing layer.
 
-As more operational responsibility moves into applications, agents, models, automated workflows, and other software, that implicit semantic layer becomes part of the runtime problem. An organization cannot reliably automate structures it cannot describe, and it cannot distribute that automation across independently evolving systems if each system has to reconstruct organizational meaning independently.
+They knew that `Member` in one system meant roughly the same thing as `Customer` somewhere else. They knew why a policy applied in one situation and not another. They translated between applications, reports, documents, departments, and operating language. They reconciled contradictions and carried context that software never represented.
 
-ONTOK provides a portable semantic substrate for that environment. It does not require the organization to become one application, one database, one graph, or one ontology. It allows independently evolving systems to remain locally appropriate while participating in a coherent, machine-operable understanding of the same organization.
+Humans were the semantic middleware.
 
-The systems do not need to share an implementation. They need a way to share meaning.
+As more of the organization becomes executable through applications, workflows, graphs, agents, and models, that implicit semantic layer becomes part of the runtime architecture. Software cannot reliably operate the organization if every system must independently reconstruct what the organization means.
+
+ONTOK makes that meaning part of the program.
+
+**Write the organization as software. Let its systems share meaning without requiring them to share an implementation.**

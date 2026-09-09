@@ -358,9 +358,9 @@ Do not introduce generic `kind`, `type`, or URI discriminator fields to simulate
 
 ## Specification Placement
 
-Semantic Topology belongs in the **Meaning** portion of `ontok-core`.
+Semantic Topology is the `st` module. It imports Core and does not enlarge the twelve-primitive kernel.
 
-The implementation-independent Core specification should define:
+The implementation-independent specification is `spec/ontok-st.xml`. It defines:
 
 * `SemanticTopology`
 * `TopologyRevision`
@@ -370,11 +370,9 @@ The implementation-independent Core specification should define:
 * `Related`
 * `CloseMatch`
 * `Overlap`
-* their invariants and derivable semantics
+* their invariants and SKOS alignment
 
-The Python realization should implement the same semantics under `ontok.core`.
-
-This changes ONTOK Core's capabilities without changing its twelve-primitive kernel.
+The Python realization is `ontok.st` and depends one-way on `ontok.core`.
 
 ## Completion Criterion
 

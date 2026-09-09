@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontok module="st" imports="ontok-core.xml">
+  <topology>
+    <TopologyRevision scalar="integer" minimum="1">The positive revision of one Semantic Topology.</TopologyRevision>
+    <SemanticRelation refines="Relation">
+      <description>A Relation from one Concept to another Concept.</description>
+      <field name="source" type="Concept"/>
+      <field name="target" type="Concept"/>
+    </SemanticRelation>
+    <Equivalent refines="SemanticRelation">Two Concepts express the same meaning for purposes of the topology.</Equivalent>
+    <Broader refines="SemanticRelation">
+      <description>The source Concept is semantically broader than the target.</description>
+      <derivation name="narrower" type="Broader">the inverse view; not stored as a second Relation</derivation>
+    </Broader>
+    <Related refines="SemanticRelation">The Concepts have a meaningful associative relationship without equivalence or hierarchy.</Related>
+    <CloseMatch refines="SemanticRelation">The Concepts are similar enough to map or retrieve, and not safe to treat as equivalent.</CloseMatch>
+    <Overlap refines="SemanticRelation">The Concepts share part of their meaning while each retains meaning the other does not contain.</Overlap>
+    <SemanticTopology refines="Entity">
+      <description>One organization's current structure of meaning among its Concepts.</description>
+      <field name="revision" type="TopologyRevision"/>
+      <field name="concept" type="Concept" cardinality="zero-or-more"/>
+      <field name="relation" type="SemanticRelation" cardinality="zero-or-more"/>
+    </SemanticTopology>
+  </topology>
+  <composition>
+    <law name="membership">Every SemanticRelation in a SemanticTopology has source and target Concepts in that topology.</law>
+    <law name="endpoints">A SemanticRelation's source and target are Concepts.</law>
+    <law name="broader-irreflexive">A Broader Relation does not relate a Concept to itself.</law>
+    <law name="broader-acyclic">The directed Broader graph of a SemanticTopology is acyclic.</law>
+    <law name="equivalent-identity">Equivalent does not merge or destroy either Concept's identity.</law>
+    <law name="unknown">Absence of a SemanticRelation means undeclared, not false.</law>
+    <law name="generality">A SemanticRelation is asserted generally within its topology. Restriction to a Context is not a field of this module yet.</law>
+    <law name="authority">A proposed SemanticRelation is not part of a SemanticTopology until it is constructed into one.</law>
+    <law name="locality">A SemanticTopology does not rewrite the originating systems of the meanings it relates.</law>
+  </composition>
+  <alignment>
+    <law name="skos-concept">An ONTOK Concept may be projected as a SKOS Concept.</law>
+    <law name="skos-scheme">A SemanticTopology may be projected as a SKOS ConceptScheme.</law>
+    <law name="skos-broader">Broader may be projected as skos:broader. narrower is the inverse view.</law>
+    <law name="skos-related">Related may be projected as skos:related.</law>
+    <law name="skos-exact">Equivalent may be projected as skos:exactMatch.</law>
+    <law name="skos-close">CloseMatch may be projected as skos:closeMatch.</law>
+    <law name="skos-overlap">Overlap has no required SKOS property; it remains an ONTOK Relation unless a projection is chosen.</law>
+    <law name="skos-surface">SKOS is an interchange vocabulary. It is not the ONTOK programming surface.</law>
+  </alignment>
+</ontok>

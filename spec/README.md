@@ -9,6 +9,7 @@ Every `ontok-*.xml` file defines one semantic module:
 - `ontok-core.xml` defines the universal organizational type system.
 - `ontok-vsm.xml` defines value streams as compositions of organizational action.
 - `ontok-scim.xml` aligns SCIM identity resources with ONTOK.
+- `ontok-st.xml` defines Semantic Topology as the structure of meaning among Concepts.
 - Future `ontok-<module>.xml` files may define additional standard capabilities.
 
 There may be any number of modules. This allows ONTOK to acquire major organizational capabilities without enlarging Core or forcing every organization to adopt every capability.
@@ -35,6 +36,6 @@ Each XML module and its corresponding type-native reference package form one exe
 
 Each language realization belongs under `packages/<language>/` and uses that language's native workspace and packaging tools. The Python packages live under `packages/python/` as independently publishable members of one uv workspace sharing the `ontok` namespace.
 
-Package dependencies mirror XML imports exactly in every language: Core depends on no ONTOK package, while VSM and SCIM depend one-way on Core.
+Package dependencies mirror XML imports exactly in every language: Core depends on no ONTOK package, while VSM, SCIM, and ST depend one-way on Core.
 
 Only `README.md` and `ontok-*.xml` source files belong in this directory. Implementations, tests, generated files, and build artifacts belong elsewhere.
