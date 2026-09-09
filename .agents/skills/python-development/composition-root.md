@@ -47,6 +47,7 @@ async def main() -> None:
 - Client binding → [binding](binding.md); the root instantiates clients and hands them over.
 - Request handling → [route](route.md); the root registers or invokes routes.
 - Environment reads → [config](config.md); the root constructs config once.
+- Program placement → lives in `main.py`; see [topology](topology.md).
 
 ## Allowed
 

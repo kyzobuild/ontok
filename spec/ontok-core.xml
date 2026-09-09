@@ -15,25 +15,16 @@
   <reality>
     <Timestamp scalar="date-time" timezone="required">A timezone-qualified point on the timeline.</Timestamp>
     <PositiveDuration scalar="duration" minimum-exclusive="zero">A strictly positive length of elapsed time.</PositiveDuration>
-    <NonNegativeDuration scalar="duration" minimum="zero">A length of elapsed time that cannot precede its origin.</NonNegativeDuration>
-    <TemporalExtentKind scalar="string">
-      <value name="instant">A temporal extent occupying one point.</value>
-      <value name="interval">A temporal extent continuing for positive time.</value>
-    </TemporalExtentKind>
     <Instant>
       <description>A temporal extent occupying one point on the timeline.</description>
-      <field name="kind" type="TemporalExtentKind" fixed="instant"/>
       <field name="at" type="Timestamp"/>
-      <derivation name="ends_at" type="Timestamp">at</derivation>
     </Instant>
     <Interval>
       <description>A temporal extent beginning at one point and continuing for positive time.</description>
-      <field name="kind" type="TemporalExtentKind" fixed="interval"/>
       <field name="begins_at" type="Timestamp"/>
       <field name="duration" type="PositiveDuration"/>
-      <derivation name="ends_at" type="Timestamp">begins_at plus duration</derivation>
     </Interval>
-    <TemporalExtent union="Instant Interval" discriminator="kind">The exhaustive temporal forms an occurrence can occupy.</TemporalExtent>
+    <TemporalExtent union="Instant Interval">The exhaustive temporal forms an occurrence can occupy.</TemporalExtent>
     <Entity refines="Node">
       <description>A particular thing whose identity persists as its conditions and associations change.</description>
     </Entity>
@@ -42,54 +33,46 @@
       <description>An identifiable domain association from one Node to another.</description>
       <field name="id" type="RelationId"/>
     </Relation>
-    <State refines="Node">
-      <description>Where a Node stands.</description>
+    <State refines="Entity">
+      <description>A condition that goes on an Entity.</description>
     </State>
-    <Memorialization>
-      <description>The creation of a durable memorial by one organizational Node after an occurrence.</description>
-      <field name="memorializer" type="Node"/>
-      <field name="delay" type="NonNegativeDuration"/>
-    </Memorialization>
     <Event refines="Node">
-      <description>A durable memorial of one organizational occurrence.</description>
-      <field name="memorialization" type="Memorialization"/>
+      <description>An occurrence.</description>
       <field name="occurred" type="TemporalExtent"/>
-      <derivation name="recorded_at" type="Timestamp">occurred.ends_at plus memorialization.delay</derivation>
     </Event>
-    <Causation refines="Relation">
-      <description>A Relation declaring that one Event caused another Event.</description>
-      <field name="source" type="Event"/>
-      <field name="target" type="Event"/>
-    </Causation>
   </reality>
   <agency>
     <Role refines="Node">
       <description>An organizational capacity through which an Entity acts.</description>
     </Role>
-    <Goal refines="Node">
-      <description>An intended State toward which action is directed.</description>
-      <field name="state" type="State"/>
+    <Goal refines="Entity">
+      <description>An intended end.</description>
     </Goal>
     <Action refines="Node">
-      <description>Intentional activity performed or attempted by an Entity through a Role toward a Goal.</description>
-      <field name="actor" type="Entity"/>
+      <description>A doing.</description>
       <field name="role" type="Role"/>
       <field name="goal" type="Goal"/>
+      <field name="result" type="Entity"/>
       <field name="event" type="Event"/>
     </Action>
   </agency>
   <meaning>
-    <Concept refines="Node">The meaning of a declaration and its alignment to other declarations.</Concept>
+    <Concept refines="Node">
+      <description>What a declaration means.</description>
+    </Concept>
+    <States collection="State" ordering="sequence" minimum="1">The conditions that constitute a situation.</States>
     <Context refines="Node">
-      <description>The States under which meaning or action applies.</description>
-      <field name="state" type="State" cardinality="one-or-more"/>
+      <description>A situation.</description>
+      <field name="state" type="States"/>
     </Context>
   </meaning>
   <governance>
     <Rule refines="Node">
-      <description>A declaration determining whether an Action is required, permitted, or prohibited within a Context.</description>
-      <field name="action" type="Action"/>
+      <description>A constraint.</description>
       <field name="context" type="Context"/>
+      <field name="role" type="Role"/>
+      <field name="goal" type="Goal"/>
+      <field name="doing" type="Action"/>
     </Rule>
   </governance>
 </ontok>

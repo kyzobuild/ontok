@@ -10,6 +10,6 @@ The type-native Python reference package for `spec/ontok-core.xml`.
 
 Core realizes ONTOK's universal organizational type system and depends on no other ONTOK package. Extension packages may depend on Core; Core never depends on an extension.
 
-## Status
+## Realization
 
-`NodeId`, `Node`, and `Connection` realize the structural foundation. `Entity`, `Relation`, and `Event`, together with their temporal, memorialization, and causation structures, realize those portions of organizational reality. `State` is an empty sortal. `Role` realizes the office through which an Entity acts. Goal, Action, and later Core layers remain unimplemented until their semantic definitions and dependencies are complete.
+`NodeId`, `Node`, and `Connection` realize the structural foundation. `Entity`, `Relation`, `State`, and `Event`, together with their temporal, memorialization, and causation structures, realize those portions of organizational reality. `Role` realizes the office through which an Entity acts. `Goal` realizes an intended end that goes on an Entity. `Action` realizes a doing with an Entity result and a memorial Event. `Concept` realizes what a declaration means. `Context` realizes the States that constitute a situation. Rule remains unimplemented until it is modeled.

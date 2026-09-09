@@ -31,6 +31,7 @@ A request that does not conform fails construction at the surface; nothing behin
 - This program's own API request or reply shape → this construct.
 - Another system's shape → [foreign model](foreign-model.md). Composition direction separates the edge's two models: the contract model is ours, built of our types and names, projecting outward; the foreign model is theirs, named for their thing, its aliases holding their keys, lifting inward.
 - A composite that is a domain fact rather than a surface shape → [concept model](concept-model.md).
+- Program placement → lives in `domain/<context>/api.py`; see [topology](topology.md).
 
 ## Allowed
 

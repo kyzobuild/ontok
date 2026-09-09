@@ -32,6 +32,7 @@ class PositionBinding:
 - Domain state and domain transitions → [consistency model](consistency-model.md); the binding only constructs it.
 - Client instantiation and configuration → [composition root](composition-root.md); the binding receives constructed clients.
 - Transport ingress → [route](route.md); the binding handles no request.
+- Program placement → lives in `service/<context>.py`; see [topology](topology.md).
 
 ## Allowed
 

@@ -33,6 +33,7 @@ A secret is never a bare `str`: `SecretStr` keeps it out of every dump, repr, an
 - A configured value used in the domain → carried as its declared [semantic scalar](semantic-scalar.md), never re-read from the environment.
 - Client instantiation from config values → the [composition root](composition-root.md).
 - A value that is domain state rather than environment fact → the [consistency model](consistency-model.md).
+- Program placement → lives in `config.py`; see [topology](topology.md).
 
 ## Allowed
 

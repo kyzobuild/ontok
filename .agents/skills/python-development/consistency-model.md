@@ -47,6 +47,7 @@ class PositionConsistencyModel(BaseModel):
 - Client binding → [binding](binding.md); the consistency model receives constructed clients as fields.
 - A fact the state implies → a [derivation](derivation.md) on the state's model, never a method here.
 - A frozen domain composite → [concept model](concept-model.md).
+- Program placement → lives in `domain/<context>/[consistency_model].py`; see [topology](topology.md).
 
 ## Allowed
 

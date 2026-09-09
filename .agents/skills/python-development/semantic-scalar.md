@@ -55,6 +55,7 @@ A scalar constructs where its composite is proven: pass the raw value where the 
 - One axis, every member the same kind of thing → this construct.
 - A member needing a field or behavior a sibling lacks → two axes → [union](union.md).
 - A value composed of other values → [value object](value-object.md) or [concept model](concept-model.md).
+- Program placement → lives in `domain/<context>/type.py`; see [topology](topology.md).
 
 ## Allowed
 

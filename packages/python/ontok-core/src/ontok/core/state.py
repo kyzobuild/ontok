@@ -1,5 +1,5 @@
-from ontok.core.structure import Node
+from ontok.core.entity import Entity
 
 
-class State(Node):
-    """Where a Node stands."""
+class State(Entity):
+    """A condition that goes on an Entity."""

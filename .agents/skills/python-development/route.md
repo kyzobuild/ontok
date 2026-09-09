@@ -29,6 +29,7 @@ The route dispatches `message.fill`, the innermost value the [verb](verb.md) con
 - The shape the route constructs belongs to its owner → [contract model](contract-model.md) when this program publishes the API, [foreign model](foreign-model.md) when the caller's shape is another system's.
 - Domain work → the [verb](verb.md) the route dispatches to.
 - Wiring and registration → [composition root](composition-root.md).
+- Program placement → lives in `api/<context>.py`; see [topology](topology.md).
 
 ## Allowed
 

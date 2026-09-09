@@ -33,6 +33,7 @@ class Spread(BaseModel):
 - A small identity-less composition of scalars, equal by value → this construct.
 - A single value → [semantic scalar](semantic-scalar.md).
 - A full domain thing or fact, anything with domain identity or a kind pin → [concept model](concept-model.md).
+- Program placement → lives in `domain/<context>/value.py`; see [topology](topology.md).
 
 ## Allowed
 

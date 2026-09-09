@@ -56,6 +56,7 @@ A capturing verb feeds the [ordered union](ordered-union.md)'s constructor:
 - A fact implied by already-proven fields → a [derivation](derivation.md), not a verb.
 - A method that only retrieves and returns → not a verb; consumers read facts that transitions establish.
 - Construction of the request shape → the [route](route.md); the verb receives the innermost value, never a transport wrapper.
+- Program placement → lives on the consistency model in `domain/<context>/[consistency_model].py`; see [topology](topology.md).
 
 ## Allowed
 
