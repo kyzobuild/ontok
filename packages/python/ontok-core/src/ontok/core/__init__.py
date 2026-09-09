@@ -6,6 +6,13 @@ from ontok.core.event import Memorialization as Memorialization
 from ontok.core.identity import NodeId as NodeId
 from ontok.core.relation import Relation as Relation
 from ontok.core.relation import RelationId as RelationId
+from ontok.core.state import Graded as Graded
+from ontok.core.state import GradedStanding as GradedStanding
+from ontok.core.state import Plain as Plain
+from ontok.core.state import PlainStanding as PlainStanding
+from ontok.core.state import Position as Position
+from ontok.core.state import StandingKind as StandingKind
+from ontok.core.state import State as State
 from ontok.core.structure import Connection as Connection
 from ontok.core.structure import Node as Node
 from ontok.core.time import Instant as Instant

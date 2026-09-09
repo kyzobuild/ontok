@@ -54,11 +54,30 @@
       <field name="id" type="RelationId"/>
       <field name="relation_type" type="TypeId"/>
     </Relation>
-    <State refines="Node">
-      <description>A condition of a Node that holds within the organizational graph.</description>
-      <field name="state_type" type="TypeId"/>
-      <field name="subject" type="Node"/>
-    </State>
+    <Position scalar="string" format="lower-hyphenated">One recognized position within a standing.</Position>
+    <StandingKind scalar="string">
+      <value name="plain">A standing whose positions do not rank.</value>
+      <value name="graded">A standing whose positions rank from lowest to highest.</value>
+    </StandingKind>
+    <PlainStanding collection="Position" ordering="none" minimum="2" distinct="true">The unordered positions of one standing, each excluding the others.</PlainStanding>
+    <GradedStanding collection="Position" ordering="lowest-first" minimum="2" distinct="true">The positions of one standing in order, lowest first, each excluding the others.</GradedStanding>
+    <Plain refines="Node">
+      <description>The position a Node holds among unordered positions that exclude one another.</description>
+      <field name="kind" type="StandingKind" fixed="plain"/>
+      <field name="standing" type="PlainStanding"/>
+      <field name="at" type="Position" within="standing"/>
+      <derivation name="contraries" type="Position" cardinality="one-or-more">standing without at</derivation>
+    </Plain>
+    <Graded refines="Node">
+      <description>The position a Node holds on an ordered standing.</description>
+      <field name="kind" type="StandingKind" fixed="graded"/>
+      <field name="standing" type="GradedStanding"/>
+      <field name="at" type="Position" within="standing"/>
+      <derivation name="contraries" type="Position" cardinality="one-or-more">standing without at</derivation>
+      <derivation name="rank" type="integer" minimum="0">the place of at within standing, lowest at zero</derivation>
+      <derivation name="outranks" type="boolean" given="Graded">rank above the given State's rank, the standings being one</derivation>
+    </Graded>
+    <State union="Plain Graded" discriminator="kind">Where a Node stands among the recognized positions of one standing.</State>
     <Memorialization>
       <description>The creation of a durable memorial by one organizational Node after an occurrence.</description>
       <field name="memorializer" type="Node"/>
