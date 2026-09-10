@@ -49,12 +49,14 @@
       <description>An intended end.</description>
     </Goal>
     <Action refines="Node">
-      <description>A doing.</description>
+      <description>Declared work.</description>
       <field name="role" type="Role"/>
       <field name="goal" type="Goal"/>
-      <field name="result" type="Entity"/>
-      <field name="event" type="Event"/>
     </Action>
+    <Work refines="Entity">
+      <description>A persistent undertaking of a declared Action.</description>
+      <field name="action" type="Action"/>
+    </Work>
   </agency>
   <meaning>
     <Concept refines="Node">
@@ -68,10 +70,8 @@
   </meaning>
   <governance>
     <Rule refines="Node">
-      <description>A constraint.</description>
+      <description>A constraint on declared work within a situation.</description>
       <field name="context" type="Context"/>
-      <field name="role" type="Role"/>
-      <field name="goal" type="Goal"/>
       <field name="doing" type="Action"/>
     </Rule>
   </governance>

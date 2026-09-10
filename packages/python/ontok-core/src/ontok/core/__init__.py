@@ -18,3 +18,4 @@ from ontok.core.time import Interval as Interval
 from ontok.core.time import PositiveDuration as PositiveDuration
 from ontok.core.time import TemporalExtent as TemporalExtent
 from ontok.core.time import Timestamp as Timestamp
+from ontok.core.work import Work as Work

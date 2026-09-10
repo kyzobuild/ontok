@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontok module="ex" imports="ontok-core.xml">
+  <execution>
+    <PlannedWork collection="Work" ordering="sequence" minimum="1">The Work declared for one execution.</PlannedWork>
+    <Dependency refines="Relation">
+      <description>One Work whose completion enables another Work.</description>
+      <field name="source" type="Work"/>
+      <field name="target" type="Work"/>
+    </Dependency>
+    <Dependencies collection="Dependency" ordering="none">The dependency graph of one execution.</Dependencies>
+    <TerminalWork collection="Work" ordering="sequence">The Work with no dependent Work.</TerminalWork>
+    <ExecutionPlan refines="Entity">
+      <description>The Work and Dependencies declared for one execution.</description>
+      <field name="work" type="PlannedWork"/>
+      <field name="dependency" type="Dependencies"/>
+      <derivation name="terminal" type="TerminalWork">Work that is not the source of a Dependency.</derivation>
+    </ExecutionPlan>
+    <TriggerEvents collection="Event" ordering="sequence" minimum="1">The occurrences enabling one Work.</TriggerEvents>
+    <Activation>
+      <description>Work enabled once by its triggering occurrences.</description>
+      <field name="work" type="Work"/>
+      <field name="trigger" type="TriggerEvents"/>
+    </Activation>
+    <Activations collection="Activation" ordering="sequence">A sequence of Work enablements.</Activations>
+    <ActivatedWork collection="Work" ordering="sequence">The Work represented by Activations.</ActivatedWork>
+    <Completion refines="Event">
+      <description>The occurrence and outcome of performed Work.</description>
+      <field name="activation" type="Activation"/>
+      <field name="outcome" type="Entity"/>
+    </Completion>
+    <Completions collection="Completion" ordering="sequence">The completed Work of one execution.</Completions>
+    <CompletedWork collection="Work" ordering="sequence">The Work represented by Completions.</CompletedWork>
+    <ExecutionStatusKind scalar="string">
+      <value name="active">Work is active and awaiting Completion.</value>
+      <value name="blocked">No Work is active and terminal Work remains incomplete.</value>
+      <value name="finished">Every terminal Work has completed.</value>
+    </ExecutionStatusKind>
+    <PendingWork collection="Work" ordering="sequence" minimum="1">Activated Work without a Completion.</PendingWork>
+    <Active>
+      <description>Work is active and awaiting Completion.</description>
+      <field name="kind" type="ExecutionStatusKind" fixed="active"/>
+      <field name="completed" type="CompletedWork"/>
+      <field name="terminal" type="TerminalWork"/>
+      <field name="pending" type="PendingWork"/>
+    </Active>
+    <Blocked>
+      <description>No Work is active and terminal Work remains incomplete.</description>
+      <field name="kind" type="ExecutionStatusKind" fixed="blocked"/>
+      <field name="completed" type="CompletedWork"/>
+      <field name="terminal" type="TerminalWork"/>
+    </Blocked>
+    <Finished>
+      <description>Every terminal Work has completed.</description>
+      <field name="kind" type="ExecutionStatusKind" fixed="finished"/>
+      <field name="completed" type="CompletedWork"/>
+      <field name="terminal" type="TerminalWork"/>
+    </Finished>
+    <ExecutionStatus union="Active Blocked Finished" discriminator="kind">The present disposition of an execution.</ExecutionStatus>
+    <ExecutionKind scalar="string">
+      <value name="origin">An execution constructed from its triggering occurrence.</value>
+      <value name="progression">An execution reconstructed by one Work Completion.</value>
+    </ExecutionKind>
+    <ExecutionOrigin refines="Entity">
+      <description>An execution constructed from its triggering occurrence.</description>
+      <field name="kind" type="ExecutionKind" fixed="origin"/>
+      <field name="plan" type="ExecutionPlan"/>
+      <field name="trigger" type="Event"/>
+      <derivation name="completions" type="Completions">The empty sequence.</derivation>
+      <derivation name="completed" type="CompletedWork">The empty sequence.</derivation>
+      <derivation name="enabled" type="Activations">Planned Work without prerequisites, enabled by trigger.</derivation>
+      <derivation name="activations" type="Activations">Every Activation constructed for this execution.</derivation>
+      <derivation name="activated" type="ActivatedWork">The Work represented by activations.</derivation>
+      <derivation name="status" type="ExecutionStatus">Active when activated Work awaits Completion; otherwise blocked.</derivation>
+    </ExecutionOrigin>
+    <ExecutionProgression refines="Entity">
+      <description>An execution reconstructed by one Work Completion.</description>
+      <field name="kind" type="ExecutionKind" fixed="progression"/>
+      <field name="prior" type="Execution"/>
+      <field name="completion" type="Completion"/>
+      <derivation name="plan" type="ExecutionPlan">The plan established at the origin.</derivation>
+      <derivation name="trigger" type="Event">The occurrence that established the execution.</derivation>
+      <derivation name="completions" type="Completions">Prior Completions followed by completion when it is distinct and carries an Activation from this execution or external prerequisite Work.</derivation>
+      <derivation name="completed" type="CompletedWork">The Work represented by completions.</derivation>
+      <derivation name="enabled" type="Activations">Previously inactive Work whose prerequisites have completed.</derivation>
+      <derivation name="activations" type="Activations">Prior Activations followed by enabled.</derivation>
+      <derivation name="activated" type="ActivatedWork">The Work represented by activations.</derivation>
+      <derivation name="status" type="ExecutionStatus">Finished when every terminal Work completed; active while activated Work awaits Completion; otherwise blocked.</derivation>
+    </ExecutionProgression>
+    <Execution union="ExecutionOrigin ExecutionProgression" discriminator="kind">The recursively constructed history of one event-driven execution.</Execution>
+    <law name="event-driven-construction">A trigger constructs an ExecutionOrigin; each Completion constructs one ExecutionProgression.</law>
+    <law name="enablement">Construction derives each Work Activation once, after every prerequisite Work has a Completion.</law>
+    <law name="applicability">A repeated Completion or a Completion for unactivated planned Work does not alter execution facts.</law>
+    <law name="transport-independence">EX imports no event transport; a transport delivers constructed Events and publishes derived Activations.</law>
+  </execution>
+</ontok>

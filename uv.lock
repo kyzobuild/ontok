@@ -5,6 +5,7 @@ requires-python = ">=3.13"
 [manifest]
 members = [
     "ontok-core",
+    "ontok-ex",
     "ontok-scim",
     "ontok-st",
     "ontok-vsm",
@@ -184,6 +185,17 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "pydantic", specifier = ">=2.9" }]
+
+[[package]]
+name = "ontok-ex"
+version = "0.1.0"
+source = { editable = "packages/python/ontok-ex" }
+dependencies = [
+    { name = "ontok-core" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "ontok-core", editable = "packages/python/ontok-core" }]
 
 [[package]]
 name = "ontok-scim"
