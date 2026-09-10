@@ -1,0 +1,41 @@
+[project]
+name = "ontok-core"
+version = "0.1.0"
+description = "The universal ONTOK organizational type system."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Kyle Tobin", email = "tobin.kyle@gmail.com" }]
+keywords = [
+    "ontok",
+    "ontology",
+    "semantics",
+    "types",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = ["pydantic>=2.9,<3"]
+import-names = ["ontok.core"]
+import-namespaces = ["ontok"]
+
+[project.urls]
+Homepage = "https://github.com/kyzobuild/ontok"
+Repository = "https://github.com/kyzobuild/ontok"
+Issues = "https://github.com/kyzobuild/ontok/issues"
+Specification = "https://github.com/kyzobuild/ontok/blob/main/spec/ontok-core.xml"
+
+[build-system]
+requires = ["uv_build>=0.12.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "ontok.core"
+source-include = ["tests/**"]
