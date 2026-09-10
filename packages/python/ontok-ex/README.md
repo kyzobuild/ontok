@@ -6,12 +6,40 @@ The type-native Python reference package for `spec/ontok-ex.xml`.
 
 `ontok.ex`
 
-## Responsibility
+## Construction graph
 
-EX is the transport-independent event-driven executor for ONTOK Work. Trigger and Completion Events construct an immutable execution history that activates dependent Work exactly once and declares the execution active, blocked, or finished. It depends one-way on `ontok-core` and remains independent of other extension packages.
+`ontok-ex` is an event-driven execution algebra built directly from ONTOK. A Program declares
+exact Work. An ExecutionRequest is the trigger. Activation is enabled Work. Completion is
+performed Work. Each arrival constructs the next immutable execution fact and its emission.
 
-## Realization
+```text
+ExecutionRequest
+└── Execution
+    └── BeginningActivation
+        └── BeginningCompletion
+            ├── LeftActivation
+            │   └── LeftCompletion
+            └── RightActivation
+                └── RightCompletion
+                    └── BranchesCompleted
+                        └── JoinedActivation
+                            └── JoinedCompletion
+                                └── TerminalExecution
+```
 
-An `ExecutionPlan` declares Work and Dependencies. An `ExecutionOrigin` constructs from its triggering Event. Each Completion constructs an `ExecutionProgression`, whose recursive derivations expose newly enabled Activations and an active, blocked, or finished status.
+`Program` is declaration only. Runtime identity and time arrive on `ExecutionRequest` and
+Completion facts; the package generates neither. Exact Activation refinements own exact Work
+and prerequisite fields. Every Activation derives and serializes direct execution correlation
+from its originating request. `BranchesCompleted` is the required heterogeneous product for the
+join, so JoinedActivation cannot exist without both exact branch Completions.
 
-Construction is execution. EX has no callback, runner loop, client protocol, bus, or API. A transport only has to deliver constructed Events and publish derived Activations; the application performing a specific Action constructs its Completion.
+## Transport binding
+
+A bus binding connects two typed constructions:
+
+- `ExecutionRequest` constructs `Execution`, whose emission carries BeginningActivation.
+- An exact Completion and exact current state construct an arrival, whose facts are the successor
+  execution state and emission.
+
+The package has no bus protocol, callback, service, registry, readiness classifier, or runner
+loop. A terminal Completion recursively contains the complete proof that the Program ran.

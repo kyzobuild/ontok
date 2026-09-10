@@ -10,7 +10,7 @@ Every `ontok-*.xml` file defines one semantic module:
 - `ontok-vsm.xml` defines value streams as compositions of organizational action.
 - `ontok-scim.xml` aligns SCIM identity resources with ONTOK.
 - `ontok-st.xml` defines Semantic Topology as the structure of meaning among Concepts.
-- `ontok-ex.xml` defines transport-independent event-driven execution of Work.
+- `ontok-ex.xml` defines Program declaration and event-driven execution by Activation and Completion.
 - Future `ontok-<module>.xml` files may define additional standard capabilities.
 
 There may be any number of modules. This allows ONTOK to acquire major organizational capabilities without enlarging Core or forcing every organization to adopt every capability.
