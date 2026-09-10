@@ -291,3 +291,9 @@ As more of the organization becomes executable through applications, workflows, 
 ONTOK makes that meaning part of the program.
 
 **Write the organization as software. Let its systems share meaning without requiring them to share an implementation.**
+
+---
+
+## License
+
+ONTOK is licensed under the [Apache License 2.0](LICENSE).
