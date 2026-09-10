@@ -19,6 +19,9 @@ dev = ["basedpyright", "import-linter", "pytest>=8", "ruff>=0.8"]
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 testpaths = ["tests", "packages/python"]
+strict_config = true
+strict_markers = true
+xfail_strict = true
 
 [tool.ruff]
 target-version = "py313"

@@ -151,9 +151,7 @@ class WaitingForRightCompletion(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    kind: Literal[ExecutionEmissionKind.WAITING_FOR_RIGHT] = (
-        ExecutionEmissionKind.WAITING_FOR_RIGHT
-    )
+    kind: Literal[ExecutionEmissionKind.WAITING_FOR_RIGHT] = ExecutionEmissionKind.WAITING_FOR_RIGHT
     left: LeftCompletion
     right: RightActivation
 
@@ -163,9 +161,7 @@ class WaitingForLeftCompletion(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    kind: Literal[ExecutionEmissionKind.WAITING_FOR_LEFT] = (
-        ExecutionEmissionKind.WAITING_FOR_LEFT
-    )
+    kind: Literal[ExecutionEmissionKind.WAITING_FOR_LEFT] = ExecutionEmissionKind.WAITING_FOR_LEFT
     right: RightCompletion
     left: LeftActivation
 
@@ -175,9 +171,7 @@ class JoinedActivated(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    kind: Literal[ExecutionEmissionKind.JOINED_ACTIVATED] = (
-        ExecutionEmissionKind.JOINED_ACTIVATED
-    )
+    kind: Literal[ExecutionEmissionKind.JOINED_ACTIVATED] = ExecutionEmissionKind.JOINED_ACTIVATED
     activation: JoinedActivation
 
 
@@ -242,9 +236,7 @@ class BeginningCompletedExecution(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    kind: Literal[ExecutionStateKind.BEGINNING_COMPLETED] = (
-        ExecutionStateKind.BEGINNING_COMPLETED
-    )
+    kind: Literal[ExecutionStateKind.BEGINNING_COMPLETED] = ExecutionStateKind.BEGINNING_COMPLETED
     completion: BeginningCompletion
 
     @property
@@ -405,10 +397,16 @@ class TerminalExecution(BaseModel):
     completion: JoinedCompletion
 
     @property
+    def branches(self) -> BranchesCompleted:
+        return self.completion.activation.prerequisite
+
+    @property
+    def beginning(self) -> BeginningCompletion:
+        return self.branches.left.activation.prerequisite
+
+    @property
     def request(self) -> ExecutionRequest:
-        return (
-            self.completion.activation.prerequisite.left.activation.prerequisite.activation.prerequisite
-        )
+        return self.beginning.activation.prerequisite
 
     @cached_property
     def emission(self) -> ExecutionCompleted:

@@ -28,14 +28,13 @@ Everything else in Core either supports those primitives or is constructed from 
 The class is the kind. Domain semantics are expressed through refinement:
 
 ```python
-class Invoice(Entity):
-    ...
+class Invoice(Entity): ...
 
-class ReportsTo(Relation):
-    ...
 
-class HireApproved(Event):
-    ...
+class ReportsTo(Relation): ...
+
+
+class HireApproved(Event): ...
 ```
 
 Do not introduce instance-level `type`, `kind`, `TypeId`, URI discriminator, or registry fields to simulate subclassing unless the specification explicitly requires one for semantics other than class identity.

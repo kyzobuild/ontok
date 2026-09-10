@@ -48,9 +48,7 @@ def beginning_completion(execution_request: ExecutionRequest) -> BeginningComple
         id=NodeId("01900000-0000-7000-8000-00000000000e"),
         occurred=Instant(at=Timestamp(datetime(2026, 9, 9, 18, 0, 1, tzinfo=UTC))),
         activation=Execution(request=execution_request).activation,
-        outcome=BeginningOutcome(
-            id=NodeId("01900000-0000-7000-8000-00000000000f")
-        ),
+        outcome=BeginningOutcome(id=NodeId("01900000-0000-7000-8000-00000000000f")),
     )
 
 
