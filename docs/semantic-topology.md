@@ -458,7 +458,7 @@ publish revised topology state
 
 But that lifecycle is not itself the Semantic Topology.
 
-If an organization needs that process represented explicitly, it can model it using ONTOK Core and, where execution is required, an execution module such as `ontok-ex`.
+If an organization needs that process represented explicitly, it can model it using ONTOK Core and, where execution is required, an execution module of its own.
 
 For example:
 
@@ -656,27 +656,19 @@ Semantic Topology owns semantic structure.
 
 It does not own execution mechanics.
 
-But ONTOK's execution architecture changes what that boundary means.
-
-An application may use Core and `ontok-ex` to make topology-management work executable without creating a separate semantic model for that process.
+An application may use Core to represent topology-management work without creating a separate semantic model for that process.
 
 For example:
 
 ```text
 SemanticRelationshipProposed
             ↓
-     ReviewActivation
-            ↓
         ReviewWork
-            ↓
-      ReviewCompletion
             ↓
 SemanticTopologyRevised
 ```
 
 The model may have proposed the relationship.
-
-The execution program determines what Work is legally enabled.
 
 The organizational model determines the Role, Goal, Rule, Context, and meaning involved.
 

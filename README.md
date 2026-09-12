@@ -155,16 +155,10 @@ ONTOK grows through modules rather than by turning Core into a universal model.
                           │
             ┌─────────────┼─────────────┐
             ▼             ▼             ▼
-           EX             ST           VSM
-       execution       semantic       value
-                       topology       streams
-
-                          │
-                         SCIM
-                       identity
+           ST             VSM           SCIM
+       semantic         value         identity
+       topology         streams
 ```
-
-`ontok-ex` explores typed execution over Core semantics.
 
 `ontok-st` develops the evolving relationships among independently defined Concepts.
 
@@ -239,15 +233,12 @@ The shortest paths into the architecture are:
 
 ```text
 ontok-core    the semantic kernel
-ontok-ex      the execution proof
 ontok-st      semantic topology
 ontok-vsm     value streams
 ontok-scim    identity
 ```
 
 Start with Core if you want to understand the language.
-
-Look at EX if you want to see whether the abstractions survive contact with execution.
 
 Look at ST if your organization already has multiple schemas, graphs, ontologies, or vocabularies describing overlapping business reality.
 
