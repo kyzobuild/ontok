@@ -1,6 +1,6 @@
 ---
 name: domain-discovery
-description: Decides what a domain contains from evidence before any construct is written, through a three-step schema-gated process: evidence, things, constructs. Use before modeling from any outside source (a vendor reply, SDK, document, or spec), when the user says "model this", "print the reply", or "what does this tell us about our world", and whenever a domain is about to gain or change a type.
+description: Decides what a domain contains from evidence before any construct is written, through a three-step schema-gated process evidence, things, constructs. Use before modeling from any outside source (a vendor reply, SDK, document, or spec), when the user says "model this", "print the reply", or "what does this tell us about our world", and whenever a domain is about to gain or change a type.
 ---
 
 # Domain Discovery
