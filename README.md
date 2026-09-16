@@ -1,18 +1,12 @@
+<p align="center">
+  <img src="img/ontok-hero.png" width="880" alt="ONTOK — Write the organization as software. Independently modeled systems arranged around a shared semantic kernel.">
+</p>
+
 # ONTOK
 
-## Write the organization as software.
+**ONTOK is a semantic language that makes organizational meaning explicit, portable, and executable.**
 
-Large organizations model the same business concepts over and over: in applications, APIs, event contracts, data platforms, graphs, policies, workflows, and AI systems.
-
-Those models are rarely identical. One system has a `Customer`; another has a `Member`. One graph models a `Payment`; another models a broader `Transaction`. The differences may be legitimate, but the relationships among them usually live in integration code, documentation, prompts, and people's heads.
-
-That works until more software needs to understand and act on the business directly.
-
-**ONTOK is a small semantic language for making organizational meaning explicit in software without requiring every system to share one schema, graph, platform, or runtime.**
-
-Organizations refine its kernel into their own kinds. Programs construct facts that satisfy those kinds. Extensions can then operate over the same organizational meaning rather than inventing another model of it.
-
-You do not call ONTOK as a service.
+Organizations refine its kernel into their own kinds. Programs construct facts that satisfy those kinds. Software then operates over the same organizational meaning rather than inventing another model of it.
 
 You import the language and refine it into the organization you actually have.
 
