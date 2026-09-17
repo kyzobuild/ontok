@@ -1,13 +1,15 @@
 ---
 type: Reference
-description: How a new immutable state fact constructs from prior facts. Read when representing succession without mutation or procedural state management.
+description: How a concept model's prior field represents immutable succession. Read when using the state-transition shape without mutation or procedural state management.
 ---
 
 # State Transition
 
 ## Use
 
-Use when a new fact contains the relationship between prior state and an additional fact. The constructed object is the successor, not a command to change an existing object. Its fields establish the transition; no consistency holder or transition procedure is required.
+Use a concept model with a self-typed `prior` field and an opening alternative where needed. Treat state transition as this named shape, not a separate declaration form or mutation command.
+
+A position is one account's holding in one instrument, the fold of its fills. Without both identities, the declaration names only a fold shape, not a position.
 
 ## Required Form
 
@@ -22,6 +24,12 @@ class FlatPosition(BaseModel):
         validate_default=True,
         revalidate_instances="never",
     )
+    account: AccountId
+    instrument: InstrumentId
+
+    @property
+    def net_quantity(self) -> NetQuantity:
+        return NetQuantity(Decimal(0))
 
 
 class Position(BaseModel):
@@ -36,17 +44,33 @@ class Position(BaseModel):
     fill: Fill
 
     @property
+    def account(self) -> AccountId:
+        return self.prior.account
+
+    @property
+    def instrument(self) -> InstrumentId:
+        return self.prior.instrument
+
+    @property
+    def net_quantity(self) -> NetQuantity:
+        return NetQuantity(self.prior.net_quantity.root + {Side.BUY: 1, Side.SELL: -1}[self.fill.side] * self.fill.quantity.root)
+
+    @property
     def persistence(self) -> "PersistPosition":
         return PersistPosition(position=self)
 
 
 PositionState = FlatPosition | Position
+PositionStateConstructor = TypeAdapter(PositionState)
 ```
 
-`Position(prior=previous_position, fill=fill)` is the complete transition construction. Its `Fill` annotation also constructs a nested input representation; there is no separate lift or staged construction. `FlatPosition` is the opening concept, `Position` is the successor fact, and `PositionState` is their union. A later position may contain this position as its prior fact; neither object is overwritten.
+The holding is the net of buys and sells: the opening quantity is zero, buys add, and sells subtract. Derive [NetQuantity](semantic-scalar.md) from the prior holding and the fill's side and quantity; do not store another copy of it.
 
-Here the new position authorizes persistence: its owned derivation constructs the [action](action.md), not an observed success. The action declaration and this fact can live in the same domain module; the return annotation is forward-declared, and the derivation is read only after the declarations are complete. Constructing either fact performs no I/O.
+Construction gap: agreement between `fill.instrument` and `prior.instrument` has no structural form on this substrate. These fields do not establish that agreement; do not disguise the gap with a custom validator or a post-construction check.
 
+- Construct `Position(prior=previous_position, fill=fill)` directly; let its annotations construct nested input.
+- At the boundary, obtain `prior` from the read interpreter nested in the [terminal expression](composition-root.md), never a retained local snapshot.
+- Keep the action and concept declarations in their domain module; read the forward-declared derivation only after declarations are complete.
 - Put the prior fact and the additional facts in the successor's declared fields.
 - Model compatible alternatives in those field types; do not accept arbitrary pairs and check them afterward.
 - Construct the successor directly. Do not add a verb-shaped model whose only purpose is to call the successor's constructor.
@@ -65,7 +89,3 @@ Here the new position authorizes persistence: its owned derivation constructs th
 - publish a successor before its construction completes
 - introduce a custom validator, constructor override, or `model_post_init` to enact the transition
 - store a duplicate successor beside the inputs that determine it
-
-## Prove
-
-Construct an opening fact, a successor from it, and a further successor from the first. Assert exact nested types, predecessor identity and unchanged contents, and reconstruction through the declared state union. Supply malformed nested input and assert that no successor is produced. Reject field assignment at every level. Read the authorized action and assert that it refers to its owning fact without performing an effect. Inspect declarations for no custom validators, construction hooks, verb-shaped intermediary, mutable holder, or procedure sequencing the transitions.

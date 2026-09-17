@@ -12,7 +12,7 @@ Use when this program owns a published request or reply whose shape is not alrea
 ## Required Form
 
 ```python
-class OrderRequest(BaseModel):
+class LimitOrderRequest(BaseModel):
     model_config = ConfigDict(
         frozen=True,
         extra="forbid",
@@ -20,17 +20,33 @@ class OrderRequest(BaseModel):
         validate_default=True,
         revalidate_instances="never",
     )
-    product_id: ProductId
+    instrument: InstrumentId
     side: Side
     quantity: Quantity
     limit: Price
+
+
+class FillBooked(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        strict=True,
+        validate_default=True,
+        revalidate_instances="never",
+    )
+    sequence: LedgerSequence
+    net_quantity: NetQuantity
 ```
+
+Name this `LimitOrderRequest`: its required limit price admits limit orders, not every order. Use `instrument: InstrumentId` as in the domain; another name for the same traded thing duplicates its meaning.
+
+`FillBooked` carries exactly the decided wire facts: sequence and net quantity. The [egress route](route.md) projects them from its recorded fact. Putting `recorded` in the contract would publish the entire position history and repeat the sequence beside it; do not carry that source fact or add computed fields here.
 
 - Compose contract fields from declared semantic types.
 - Construct requests at the route before anything consumes them.
 - Construct replies from proven domain facts or observed outcomes.
 - Put an alias on a field only when this program deliberately owns that published wire name.
-- Put a derived field in serialization only through `@computed_field` returning an explicitly constructed value.
+- Use `@computed_field` for facts derived from the contract's own fields, returning an explicitly constructed value. Facts projected from an external source fact are ordinary contract fields; do not carry the source merely to compute them.
 - Publish the domain model directly when ownership, meaning, shape, and evolution policy are identical; direct publication does not make it a contract-model construct.
 
 ## Do Not
@@ -39,8 +55,4 @@ class OrderRequest(BaseModel):
 - duplicate a domain model merely to create a DTO layer
 - serialize with ad hoc `include`, `exclude`, or field-copying dictionaries
 - expose a foreign client, exception, or raw representation
-- let a route add or remove semantic fields
-
-## Prove
-
-Construct each declared request boundary and refuse each field's invalid boundary. Serialize every reply variant with declared aliases. Reconstruct input with `round_trip=True, by_alias=True` when aliases exist, then assert exact published names and computed wire values separately.
+- let a route add or remove fields from the declared contract

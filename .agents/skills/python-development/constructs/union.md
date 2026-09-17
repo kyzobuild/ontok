@@ -54,7 +54,3 @@ OrderOutcome = Filled | Refused
 - select variants in an unrelated route or interpreter
 - catch construction failure and call it a refusal variant
 - use `match`, `isinstance`, class or discriminator comparisons, ternaries, or dispatch dictionaries to choose domain behavior
-
-## Prove
-
-Construct every variant and refuse each malformed field boundary. For each shared derivation, exercise every variant and run the configured static checker over a consumer that reads the derivation directly from the union. Inspect that consumer and the derivations for forbidden case selection. Round-trip through `TypeAdapter` only when variants are structurally disjoint or carry a genuine discriminator.

@@ -12,6 +12,18 @@ Use when a constructed domain decision authorizes one external effect that must 
 ## Required Form
 
 ```python
+class ReadPosition(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        strict=True,
+        validate_default=True,
+        revalidate_instances="never",
+    )
+    account: AccountId
+    instrument: InstrumentId
+
+
 class PersistPosition(BaseModel):
     model_config = ConfigDict(
         frozen=True,
@@ -25,6 +37,7 @@ class PersistPosition(BaseModel):
 
 - Name the intended effect, not its handler, client, transport, or eventual outcome.
 - Carry every semantic input required to request the effect.
+- Reads name the thing by its identity: `ReadPosition` requests the account's holding in the instrument. An order identifies the instruction a fill executed, not the position. The read action does not contain or invent the observed state.
 - Add an idempotency or repetition key only when repeated execution is part of the effect contract.
 - Keep the action frozen and recursively immutable.
 - Let the authorizing domain fact construct it. When authorization follows succession, the successor fact owns that derivation; no transition procedure or policy in the composition root is needed.
@@ -38,7 +51,3 @@ class PersistPosition(BaseModel):
 - represent ordinary domain input that requests no external effect
 - add transport serialization or foreign vocabulary
 - claim success from the action's construction
-
-## Prove
-
-Construct one complete action, omit each required field once, and supply each field's invalid boundary once. Assert equality, reject ordinary assignment, inspect nested annotations for immutable types, and assert interpreter-owned serialization separately. Serialization does not reclassify the action as a contract model.

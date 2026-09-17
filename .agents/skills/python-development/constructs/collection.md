@@ -41,7 +41,3 @@ Source duplicate policy is a separate boundary obligation. A dictionary has one 
 - expose `KeyError` as a domain result
 - use dictionary equality to claim duplicate source input was rejected
 - replace a keyed association with an ordered sequence merely because tuple construction is available
-
-## Prove
-
-For sequences, construct empty, minimum-size, repeated-value, and order-reversed inputs. Assert member runtime classes, tuple roots, bounds, preserved multiplicity and order, assignment rejection, and reconstruction equality. For any keyed form, separately prove typed key construction, lookup, key-based equality independent of insertion order, rejection of mutation through the root and every exposed view, collision handling after key construction, and the source contract's duplicate-input policy. Test raw duplicate-key input before parsing as well as already-constructed input; a dictionary round trip alone is insufficient.

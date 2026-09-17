@@ -9,6 +9,8 @@ description: How transport ingress constructs typed input and projects declared 
 
 Use where a transport representation enters or leaves the program. A route is a frozen Pydantic model whose construction completes one transport crossing.
 
+`Route` is an admitted edge suffix: it identifies the crossing rather than claiming another domain meaning. It is not permission for role-named domain models.
+
 ## Required Form
 
 ```python
@@ -37,20 +39,25 @@ class FillReplyRoute(BaseModel):
         validate_default=True,
         revalidate_instances="never",
     )
-    reply: FillReceipt
+    recorded: PositionRecorded
 
     def emit(self) -> str:
-        return self.reply.model_dump_json(by_alias=True)
+        return FillBooked(
+            sequence=self.recorded.sequence,
+            net_quantity=self.recorded.position.net_quantity,
+        ).model_dump_json(by_alias=True)
 
 
 route = FillRoute.receive(raw)
 ```
 
+The [composition-root callback](composition-root.md) returns `FillReplyRoute` holding the interpreter's `PositionRecorded` fact once. `emit` projects its sequence and net quantity into `FillBooked` and serializes only that contract, not the recorded position history. No computed fields or staged successor are needed.
+
 - Construct exactly one route from the whole transport representation.
 - Let the route's annotated domain, foreign, or contract field recursively construct the ingress value. Here `data.payload` already has the domain `Fill` shape and meaning; a foreign model or lift would duplicate that construction.
 - Expose that constructed field to the transformation, transition, or interpreter that consumes it.
-- Use a separate egress route owning exactly one constructed outbound contract.
-- Expose `receive` as the callback registered with an imported framework; no wrapper function is added.
+- Use a separate egress route holding the constructed fact from which it projects the declared outbound contract.
+- Register `FillRoute.receive` as the framework's input constructor and `FillReplyRoute.emit` as its output serializer. The one-expression callback at the [composition-root site](composition-root.md) consumes the constructed route fields and returns the reply route; the route itself contains no domain execution.
 - Keep authentication extraction, status codes, headers, and protocol framing inside the route when they are transport facts.
 
 ## Do Not
@@ -61,9 +68,5 @@ route = FillRoute.receive(raw)
 - hold current state or a concrete client
 - parse fields by hand when Pydantic's declared construction graph expresses the transport
 - pass transport wrappers into domain constructs
-- perform a domain transformation
+- perform a domain transformation; projecting already-declared facts into an outbound contract is egress, not a new domain calculation
 - assemble reply dictionaries or selectively include/exclude semantic fields
-
-## Prove
-
-Call `receive` with one captured transport string and one malformed value for each consumed field. Assert the nested runtime class and error location. Construct the egress route with each reply variant, call `emit`, and compare parsed JSON values; compare UTF-8 bytes separately only when byte identity is contractual.

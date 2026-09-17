@@ -22,6 +22,27 @@ class Price(RootModel[Decimal]):
     root: Decimal = Field(gt=0, decimal_places=8)
 
 
+class Spread(RootModel[Decimal]):
+    model_config = ConfigDict(
+        frozen=True,
+        strict=True,
+        validate_default=True,
+        revalidate_instances="never",
+    )
+    root: Decimal = Field(ge=0)
+
+
+class NetQuantity(RootModel[Decimal]):
+    """Signed holding; negative is short."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        strict=True,
+        validate_default=True,
+        revalidate_instances="never",
+    )
+
+
 class Side(StrEnum):
     BUY = "buy"
     SELL = "sell"
@@ -29,6 +50,7 @@ class Side(StrEnum):
 
 - Use frozen `RootModel[P]` when the meaning wraps a primitive.
 - Use `StrEnum` when the meaning is exactly a closed string vocabulary.
+- In strict Python construction, pass the enum member (`Side.BUY`), not raw `"buy"`. JSON accepts that string and constructs the member; acceptance in JSON mode does not grant Python-mode coercion. Keep the scalar strict.
 - Put every bound in `Field`; an open range has a docstring stating that every primitive value is valid.
 - Pass the scalar itself across semantic boundaries. Read `.root` only inside a transformation, route, interpreter, or composition root that immediately consumes the primitive.
 
@@ -39,7 +61,3 @@ class Side(StrEnum):
 - use a bare primitive where a semantic scalar is required
 - wrap a `StrEnum` again unless the wrapper adds a different meaning
 - branch to enforce a bound after construction
-
-## Prove
-
-For each existing `Field` bound, test the bound itself according to its inclusive or exclusive declaration. Construct one representative admitted value and refuse one representative value from each excluded side. Assert the root runtime type, ordinary assignment rejection, and JSON reconstruction equality. When the scalar serves as a key, additionally prove consistent equality and hashing; a wire-key encoding must be injective over admitted keys and round-trip through the declared key constructor. Successful key serialization does not prove the enclosing [collection](collection.md) immutable or establish its source duplicate policy.

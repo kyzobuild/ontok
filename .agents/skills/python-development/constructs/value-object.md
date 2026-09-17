@@ -12,7 +12,7 @@ Use for one descriptive or measured meaning with no identity, occurrence, lifecy
 ## Required Form
 
 ```python
-class Spread(BaseModel):
+class Quote(BaseModel):
     model_config = ConfigDict(
         frozen=True,
         extra="forbid",
@@ -21,12 +21,14 @@ class Spread(BaseModel):
         revalidate_instances="never",
     )
     bid: Price
-    width: SpreadWidth
+    spread: Spread
 
     @property
     def ask(self) -> Price:
-        return Price(self.bid.root + self.width.root)
+        return Price(self.bid.root + self.spread.root)
 ```
+
+[Spread](semantic-scalar.md) is the nonnegative width. `Quote` owns the bid, spread, and derived ask; do not name the whole product for one of its fields.
 
 - Every field is a semantic scalar, value object, union, or collection; a reference to an identified concept is its identity scalar, not the concept model.
 - Store the independent parameters and derive every implied fact.
@@ -40,7 +42,3 @@ class Spread(BaseModel):
 - use a mutable constituent
 - hold a client, resource, action interpreter, or current-state pointer
 - replace the value object with an anonymous tuple or dictionary
-
-## Prove
-
-Construct one product at every constituent boundary. Identify how its parameterization establishes each product invariant and test excluded input at that structural boundary, not through a custom validator. Assert field equality, reject ordinary field assignment, inspect every nested annotation for immutable types, and assert JSON reconstruction equality.

@@ -38,8 +38,4 @@ Model the independent facts and derive their consequences. For example, a bid an
 - domain branching or orchestration hidden inside a model method or property
 - program-owned `field_validator`, `model_validator`, `BeforeValidator`, `AfterValidator`, `WrapValidator`, or `PlainValidator`
 - custom `__init__`, `model_post_init`, or schema hooks used to perform domain work during construction
-- free functions, mutable consistency holders, or a runner sequencing constructions
-
-## Proof Obligations
-
-For every field constraint, construct each declared boundary and one interior value, then refuse one value in each excluded partition. For every product invariant, identify the fields, alternatives, or parameterization that establish it. Test at that structural boundary rather than recreate an invalid combination solely to check it. Inspect declarations and inherited program-owned bases for custom validators or construction hooks; none are admitted. Inspect nested runtime types, reject ordinary assignment, serialize, reconstruct, and assert equality. Inspect semantic annotations and defaults for forbidden absence sentinels, including nested aliases.
+- free domain functions, mutable consistency holders, or a runner sequencing constructions; admit only the one-expression framework callback at the [composition-root site](constructs/composition-root.md)

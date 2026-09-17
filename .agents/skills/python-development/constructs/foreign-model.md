@@ -21,13 +21,30 @@ class VenueFill(BaseModel):
         revalidate_instances="never",
     )
     order_id: OrderId = Field(alias="ordId")
+    account: AccountId
+    instrument: InstrumentId
+    side: Side
     price: VenuePrice = Field(alias="px")
     quantity: VenueQuantity = Field(alias="qty")
+
+
+class LedgerAcknowledgement(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        strict=True,
+        validate_default=True,
+        revalidate_instances="never",
+    )
+    sequence: LedgerSequence
 ```
+
+`LedgerAcknowledgement` is the ledger's reply, containing its assigned sequence. The [interpreter](effect-interpreter.md) combines it with the position it submitted to construct the domain fact `PositionRecorded`; the foreign reply does not claim to carry that position.
 
 - Name the model for the foreign thing and place foreign keys in aliases.
 - Use nested annotations for nested source structure; reuse domain types where meaning and shape agree, and use nested foreign models only where they differ.
 - Use `validation_alias`, `AliasPath`, `model_validate_json`, and `from_attributes=True` to lift the source whole.
+- With `from_attributes=True`, read the aliases as attribute names: `ordId`, `px`, and `qty`, not `order_id`, `price`, and `quantity`. Aliases govern input lookup, not just dictionary keys; fix the declared source names rather than add a mapper.
 - Model every source field the program consumes and no unconsumed field.
 - Use source-owned scalar meanings when the source's semantics differ.
 - Lift names and nesting through annotations and aliases, not a field-copying transformation. When the value meanings already agree, nested domain annotations construct those meanings directly.
@@ -44,7 +61,3 @@ class VenueFill(BaseModel):
 - hold a live client or resource
 - create a foreign model when the domain model already matches the source meaning and shape
 - create a transformation to repeat construction already expressed by annotations, aliases, or `from_attributes=True`
-
-## Prove
-
-Capture one whole unedited source reply for each documented source variant. Construct each reply, assert every consumed nested runtime class, and replace each consumed field once with a malformed value to assert its error location. For each separate conversion, identify the changed meaning and prove that it is not merely name, wrapper, or attribute lifting already handled by construction. Assert alias-key output separately with `by_alias=True` when the source supports output.

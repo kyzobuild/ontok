@@ -1,44 +1,72 @@
 ---
 type: Reference
-description: How one outer construction composes the declared program at its boundary. Read when defining an entrypoint or binding constructed facts to an imported capability.
+description: Where a framework callback evaluates the per-input terminal expression. Read when registering the program boundary or wiring read and write interpreters.
 ---
 
 # Composition Root
 
 ## Use
 
-Use at the program boundary to construct the terminal meaning from its declared dependencies. The composition root is the outer construction expression, not a runner function, a mutable holder, or an additional model wrapping the program.
+Use `main.py` as the registration site. An unexplained `prior` leaves state acquisition unmodeled; an unspecified caller leaves evaluation unmodeled. Close both edges: nest the read interpreter in the terminal expression and register its one-expression callback once. Do not count this site as a declaration form.
 
 ## Required Form
 
+In `main.py`, construct configuration and bind the concrete client at module scope, once:
+
 ```python
-PersistPositionInterpreter(
-    action=Position(prior=prior, fill=fill).persistence,
-    client=client,
-)
+config = VenueConfig()
+client = PositionClient(config.url.root, config.token.get_secret_value())
 ```
 
-`prior` and `fill` are existing facts; `client` is the imported capability supplied at the boundary. `Position` constructs the new fact without changing either input. Its `persistence` derivation constructs the authorized action. The outer interpreter binds that action to its capability. There is no separately maintained current position or sequence of domain steps.
+`receive_fill` closes over this `client`. A capability bound here is not a TCA break because a capability is not a meaning; this composition-site binding is allowed, not a module-level domain value or current-state holder.
 
-Construction binds an effect interpreter; it does not execute an external effect. The invoking framework or caller uses the interpreter's declared boundary operation. Process lifetime, connection lifetime, and transport delivery belong to the imported runtime, not a program-owned replacement runner.
+Use the application's existing framework API for this registration; do not introduce another framework or adapter:
 
+```text
+Registration: once, in main.py
+Input constructor: FillRoute.receive
+Callback: receive_fill
+Output serializer: FillReplyRoute.emit
+```
+
+```python
+def receive_fill(message: FillRoute) -> FillReplyRoute:
+    return FillReplyRoute(
+        recorded=PersistPositionInterpreter(
+            action=Position(
+                prior=ReadPositionInterpreter(
+                    action=ReadPosition(
+                        account=message.fill.account,
+                        instrument=message.fill.instrument,
+                    ),
+                    client=client,
+                ).execute(),
+                fill=message.fill,
+            ).persistence,
+            client=client,
+        ).execute(),
+    )
+```
+
+The acknowledgement carries the position that was recorded. Pass that fact once to `FillReplyRoute`; its registered `emit` projects the two-field `FillBooked` contract. Do not stage `recorded` and `successor` as separate callback locals or publish the source fact as the reply.
+
+- Bind configuration, the concrete client, and callback registration once at this site; follow the client's documented resource lifetime.
+- Register the input constructor, callback, and output serializer explicitly; do not substitute "the framework handles it" for any binding.
 - Name the terminal meaning and construct it; let its annotated dependencies construct inside the outer call.
-- Pass already constructed inputs directly. Do not copy their fields or reconstruct their identity.
+- Pass already constructed inputs directly. Obtain externally owned prior state through the read interpreter inside the expression, not through a retained snapshot.
 - Keep configuration in its declared settings model and capabilities at their concrete interpreter fields.
 - Express domain dependencies in fields and owned derivations, not statement order.
-- Bind the declared concrete interpreter without class tests, callback registries, or a dispatch table.
-- Use the existing terminal construct as the root; do not add a wrapper merely to represent execution.
+- Bind the declared interpreter without class tests or a program-owned dispatch registry.
+- Permit this free boundary callback only: typed input, one returned terminal expression, no local staging or domain branching.
+- Use the existing terminal construct at the site; do not add a wrapper merely to represent execution.
 
 ## Do Not
 
-- define a program-owned `run`, `main`, receive loop, state-advancement loop, or orchestration function
-- move that procedure into a model method, property, constructor hook, callback chain, or custom validator
+- define a program-owned runner, receive loop, state-advancement loop, or multi-statement domain callback
+- move orchestration into a model method, property, constructor hook, callback chain, or custom validator
 - introduce a mutable consistency holder or a local/global current-state reference to re-point
 - create a runner, pipeline, manager, service, graph registry, or step list
 - supply domain policy through construction order, action selection, or action filtering
 - execute an effect in a constructor or pretend that constructing an interpreter performs its effect
 - discard a domain-relevant observed outcome; it is a fact for the next declared construction, not a flag for a runner
-
-## Prove
-
-Construct the terminal object from declared inputs and inspect the resulting nested runtime types. Assert that the prior facts remain unchanged and that the action refers to the newly constructed fact. Confirm that construction makes no external call. Inspect the root for one construction expression and no runner, state assignment, callback orchestration, or custom construction hook. Test the interpreter's boundary operation separately; its observed outcome must construct through its declared type.
+- leave the source of prior state or the site that evaluates the terminal expression implicit

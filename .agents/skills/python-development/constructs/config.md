@@ -7,7 +7,7 @@ description: How environment and deployment input constructs frozen typed config
 
 ## Use
 
-Use for values supplied by the deployment environment and required to construct runtime capabilities.
+Use for deployment values. Environment input is text; applying strict Python numeric construction to that text rejects the representation before it can become a configuration fact. Use lax settings construction, not manual conversion.
 
 The package declaring this construct declares `pydantic-settings>=2,<3` beside its Pydantic dependency.
 
@@ -18,7 +18,7 @@ class VenueConfig(BaseSettings):
     model_config = SettingsConfigDict(
         frozen=True,
         extra="forbid",
-        strict=True,
+        strict=False,
         validate_default=True,
         revalidate_instances="never",
         env_prefix="VENUE_",
@@ -29,6 +29,7 @@ class VenueConfig(BaseSettings):
 
 - Construct each independently deployed configuration once at its boundary; reuse that immutable fact in dependent constructions.
 - Type every non-secret field as a semantic scalar or value object.
+- Set `strict=False` only for settings input. Retain declared output types, field constraints, freezing, `extra="forbid"`, and validated defaults; lax input is not lax meaning.
 - Use `SecretStr` for credentials and reveal it only while constructing the concrete client that consumes it.
 - Put source names in settings aliases or `env_prefix`.
 - Validate every default and make its omission meaning explicit.
@@ -37,11 +38,9 @@ class VenueConfig(BaseSettings):
 ## Do Not
 
 - call `os.environ` outside `BaseSettings`
-- use a settings dictionary, global singleton, or module-level primitive
+- use a settings dictionary, global singleton accessor, or module-level primitive in place of the settings model; the [composition root](composition-root.md) binds the constructed model and client once at module scope
 - type a secret as `str`
 - log, serialize, derive, or return a revealed secret
 - mix deployment input with mutable runtime state
-
-## Prove
-
-In an isolated process environment, construct every required variable, omit each required variable once, and provide one malformed value per field. Assert defaults, source precedence, environment names, and masked `repr`. Search program source for `get_secret_value()` and require every use to be at concrete capability construction at the boundary, never in a domain derivation or a program-owned startup procedure.
+- copy domain `strict=True` into settings or spread settings' laxness into domain models
+- compensate for textual input with a parser, validator, or field-copying conversion
